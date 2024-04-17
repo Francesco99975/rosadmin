@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:option_result/option.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rosadmin/models/user.dart';
 import 'package:rosadmin/providers/theme_provider.dart';
+import 'package:rosadmin/providers/user.dart';
 
 void main() {
   runApp(const ProviderScope(child: Rosadmin()));
@@ -37,15 +41,16 @@ class _SplashViewState extends ConsumerState<SplashView> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userxProvider);
+
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorDark,
-      body: const Center(
-        child: Text(
-          "Rosskery",
-          style: TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.white, fontSize: 24),
-        ),
-      ),
-    );
+        backgroundColor: Theme.of(context).primaryColorDark,
+        body: switch (user) {
+          AsyncData<Option<User>>() => throw UnimplementedError(),
+          AsyncError<Option<User>>() => throw UnimplementedError(),
+          AsyncLoading<Option<User>>() => throw UnimplementedError(),
+          // TODO: Handle this case.
+          AsyncValue<Option<User>>() => throw UnimplementedError(),
+        });
   }
 }
