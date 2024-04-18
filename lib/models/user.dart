@@ -118,7 +118,7 @@ class RawUser {
   factory RawUser.fromMap(Map<String, dynamic> map) {
     return RawUser(
         id: map["id"],
-        username: map["name"],
+        username: map["username"],
         email: map["email"],
         role: Role.fromMap(map["role"]));
   }

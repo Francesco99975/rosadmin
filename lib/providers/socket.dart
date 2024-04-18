@@ -5,5 +5,5 @@ part 'socket.g.dart';
 
 @riverpod
 WebSocketChannel socket(SocketRef ref) {
-  return WebSocketChannel.connect(Uri.parse("ws:/loclhost:8078/ws"));
+  return WebSocketChannel.connect(Uri.parse("localhost:8078/ws"));
 }

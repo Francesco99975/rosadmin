@@ -19,12 +19,15 @@ class Userx extends _$Userx {
     }
   }
 
-  Future<void> setUser(User user) async {
+  Future<void> setUser(User user, String otp) async {
     final storage = ref.read(storageProvider);
     await storage.write(key: "USER", value: user.toJson());
 
     final socket = ref.read(socketProvider);
-    socket.sink.add({"type": "admin", "payload": ""});
+    socket.sink.add({
+      "type": "authadmin",
+      "payload": {otp}
+    });
 
     state = AsyncData(Some<User>(user));
   }
