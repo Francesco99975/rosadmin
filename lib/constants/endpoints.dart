@@ -3,6 +3,8 @@ class Endpoints {
 
   static const loginEndpoint = "$baseUrl/login";
 
+  static const tokenCheck = "$baseUrl/check";
+
   static const adminBaseUrl = "$baseUrl/admin";
 
   static const visitsEndpoint = "$adminBaseUrl/visits";

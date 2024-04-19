@@ -23,7 +23,6 @@ class AuthRepo {
             : Right(Login.fromMap(jsonDecode(r.body) as Map<String, dynamic>))
       };
     } catch (e, stktrc) {
-      print(stktrc.toString());
       return Left(Failure(
           message: "Could not Login: ${e.toString()}", stackTrace: stktrc));
     }

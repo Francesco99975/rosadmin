@@ -70,7 +70,7 @@ class NetworkRepo {
     final tkn = _authToken.unwrapOr("");
     final Map<String, String> requestHeaders = {
       "Content-Type": "application/json",
-      "Cookie": "token=$tkn"
+      "Cookie": "token=$tkn",
     };
 
     if (AppConfig.logHttp) {

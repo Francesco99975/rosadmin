@@ -5,6 +5,8 @@ import 'package:rosadmin/providers/theme_provider.dart';
 import 'package:rosadmin/providers/user.dart';
 import 'package:option_result/option.dart' as rs;
 import 'package:rosadmin/screens/auth.dart';
+import 'package:rosadmin/screens/dashboard.dart';
+import 'package:rosadmin/utils/router.dart';
 
 void main() {
   runApp(const ProviderScope(child: Rosadmin()));
@@ -16,16 +18,16 @@ class Rosadmin extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.read(themexProvider);
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Rosadmin',
       theme: theme.current,
-      home: const SplashView(),
+      routerConfig: router,
     );
   }
 }
 
 class SplashView extends ConsumerStatefulWidget {
-  const SplashView({Key? key}) : super(key: key);
+  const SplashView({super.key});
 
   static const routePath = "/splash";
 
@@ -46,9 +48,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColorDark,
         body: switch (userx.value) {
-          rs.Some<User>(:final value) => Center(
-              child: Text(value.email),
-            ),
+          rs.Some<User>() => const DashboardScreen(),
           rs.None<User>() => const AuthScreen(),
           null => const Center(
               child: Text("Error"),
