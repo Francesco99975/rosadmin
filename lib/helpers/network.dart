@@ -34,11 +34,12 @@ class NetworkRepo {
 
   NetworkRepo({required rs.Option<String> authToken}) : _authToken = authToken;
 
-  FutureEither<Response> getRequest(param0, bool bool,
+  FutureEither<Response> getRequest(
       {required String url, bool requireAuth = true}) async {
+    final token = _authToken.unwrapOr("");
     final Map<String, String> requestHeaders = {
       "Content-Type": "application/json",
-      "Cookie": "token=$_authToken"
+      "Cookie": "token=$token"
     };
     if (requireAuth) {
       if (_authToken.isNone()) {

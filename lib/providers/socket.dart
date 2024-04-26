@@ -34,11 +34,7 @@ class SocketChannel {
                   // Respond with a pong
                   channel.sink.add('pong');
                 }
-              }, onDone: () {
-                print("Done");
-              }, onError: (error) {
-                print(error);
-              })
+              }, onDone: () {}, onError: (error) {})
             });
   }
 

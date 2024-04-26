@@ -1,11 +1,9 @@
 import 'dart:convert';
 
-import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart';
 import 'package:option_result/option_result.dart' as rs;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rosadmin/constants/endpoints.dart';
-import 'package:rosadmin/helpers/failure.dart';
 import 'package:rosadmin/models/user.dart';
 import 'package:rosadmin/providers/socket.dart';
 import 'package:rosadmin/providers/storage.dart';
