@@ -8,11 +8,12 @@ import "package:rosadmin/models/visit.dart";
 part 'visits.g.dart';
 
 @riverpod
-Future<Either<Failure, Visit>> visits(VisitsRef ref) async {
+Future<Either<Failure, Visit>> visits(
+    VisitsRef ref, String quality, String timeframe) async {
   final network = ref.read(networkProvider);
 
   final response = await network.getRequest(
-    url: "${Endpoints.visitsEndpoint}?quality=all&timeframe=l7",
+    url: "${Endpoints.visitsEndpoint}?quality=$quality&timeframe=$timeframe",
   );
 
   return response.match((l) => Left(l), (r) {
