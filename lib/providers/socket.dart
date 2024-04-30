@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:fpdart/fpdart.dart';
@@ -16,6 +17,7 @@ class Socket extends _$Socket {
 
 class SocketChannel {
   Option<WebSocketChannel> _channel;
+  final StreamController _controller = StreamController.broadcast();
 
   SocketChannel() : _channel = const Option<WebSocketChannel>.none();
 
@@ -25,17 +27,20 @@ class SocketChannel {
           WebSocketChannel.connect(Uri.parse("ws://localhost:8078/ws")));
     }
 
-    _channel.match(
-        () => null,
-        (channel) => {
-              channel.stream.listen((message) {
-                // Check if the message is a ping
-                if (message == 'ping') {
-                  // Respond with a pong
-                  channel.sink.add('pong');
-                }
-              }, onDone: () {}, onError: (error) {})
-            });
+    _channel.match(() => null, (channel) {
+      _controller.addStream(channel.stream);
+      _controller.stream.listen((message) {
+        // Check if the message is a ping
+        if (message == 'ping') {
+          // Respond with a pong
+          channel.sink.add('pong');
+        }
+      });
+    });
+  }
+
+  StreamSubscription<dynamic> subscribe(Function(dynamic) cb) {
+    return _controller.stream.listen(cb);
   }
 
   void authenticate(String otp) {

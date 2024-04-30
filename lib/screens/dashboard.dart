@@ -1,9 +1,13 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rosadmin/constants/selectors.dart';
 import 'package:rosadmin/helpers/prettifier.dart';
+import 'package:rosadmin/providers/socket.dart';
 import 'package:rosadmin/providers/user.dart';
 import 'package:rosadmin/providers/visits.dart';
 import 'package:rosadmin/screens/auth.dart';
@@ -62,12 +66,25 @@ class TrafficStats extends ConsumerStatefulWidget {
 class _TrafficStatsState extends ConsumerState<TrafficStats> {
   late String selectedQuality;
   late String selectedTimeframe;
+  late StreamSubscription<dynamic> sub;
 
   @override
   void initState() {
     super.initState();
     selectedQuality = Selectors.qualitySelectors.keys.toList()[0];
     selectedTimeframe = Selectors.timeframeSelectors.keys.toList()[0];
+    sub = ref.read(socketProvider).subscribe((event) {
+      if (jsonDecode(event)['type'] == "uvadmin") {
+        final _ = ref
+            .refresh(visitsProvider(selectedQuality, selectedTimeframe).future);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    sub.cancel();
+    super.dispose();
   }
 
   @override
