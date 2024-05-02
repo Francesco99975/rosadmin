@@ -8,4 +8,8 @@ class Endpoints {
   static const adminBaseUrl = "$baseUrl/admin";
 
   static const visitsEndpoint = "$adminBaseUrl/visits";
+
+  static const financesEndpoint = "$adminBaseUrl/finances";
+
+  static const clienteleEndpoint = "$adminBaseUrl/clientele";
 }
