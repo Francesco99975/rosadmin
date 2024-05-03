@@ -4,57 +4,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:go_router/go_router.dart';
 import 'package:rosadmin/constants/selectors.dart';
 import 'package:rosadmin/helpers/prettifier.dart';
 import 'package:rosadmin/providers/socket.dart';
-import 'package:rosadmin/providers/user.dart';
 import 'package:rosadmin/providers/visits.dart';
-import 'package:rosadmin/screens/auth.dart';
 import 'package:rosadmin/widgets/card_list.dart';
-import 'package:rosadmin/widgets/main_drawer.dart';
 import 'package:rosadmin/widgets/statistic_item.dart';
 import 'package:rosadmin/widgets/stats_chart.dart';
-
-class DashboardScreen extends ConsumerWidget {
-  const DashboardScreen({super.key});
-
-  static const routePath = "/dashboard";
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final userx = ref.read(userxProvider.notifier);
-
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Admin Dashboard'),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.exit_to_app),
-              onPressed: () {
-                userx
-                    .logout()
-                    .then((value) => {context.go(AuthScreen.routePath)});
-              },
-            ),
-          ],
-        ),
-        drawer: const MainDrawer(),
-        body: const TabBarView(
-            children: [TrafficStats(), Placeholder(), Placeholder()]),
-        bottomNavigationBar: const TabBar(
-          tabs: [
-            Tab(icon: Icon(Icons.data_usage)),
-            Tab(icon: Icon(Icons.attach_money)),
-            Tab(icon: Icon(Icons.person_outline_sharp))
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class TrafficStats extends ConsumerStatefulWidget {
   const TrafficStats({super.key});

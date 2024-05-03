@@ -55,7 +55,9 @@ class StatsChart extends StatelessWidget {
                 lineBarsData: stats
                     .map((stat) => LineChartBarData(
                         barWidth: 3,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: stat.color == 0
+                            ? Theme.of(context).colorScheme.primary
+                            : Color(stat.color),
                         isStrokeCapRound: true,
                         dotData: const FlDotData(show: true),
                         belowBarData: BarAreaData(show: false),

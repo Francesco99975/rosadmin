@@ -252,13 +252,13 @@ class Finances {
         pendingMoney: map[PENDING_MONEY],
         gains: map[GAINS],
         total: map[TOTAL],
-        ordersData: map[ORDERS_DATA],
-        monetaryData: map[MONETARY_DATA],
+        ordersData: Dataset.fromMap(map[ORDERS_DATA]),
+        monetaryData: Dataset.fromMap(map[MONETARY_DATA]),
         preferredMethodData: (map[PREFERRED_METHOD_DATA] as List<dynamic>)
             .map((e) => Dataset.fromMap(e))
             .toList(),
-        filledPie: map[FILLED_PIE],
-        methodPie: map[METHOD_PIE],
+        filledPie: Pie.fromMap(map[FILLED_PIE]),
+        methodPie: Pie.fromMap(map[METHOD_PIE]),
         rankedOrders: (map[RANKED_ORDERS] as List<dynamic>)
             .map((e) => RankedOrder.fromMap(e))
             .toList(),

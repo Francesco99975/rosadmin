@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rosadmin/main.dart';
 import 'package:rosadmin/screens/auth.dart';
-import 'package:rosadmin/screens/dashboard.dart';
+import 'package:rosadmin/screens/dashboard/dashboard.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: SplashView.routePath,

@@ -28,21 +28,37 @@ class CardList extends StatelessWidget {
             ),
           ),
           const Divider(),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: Text(
-                    items[index],
-                    style: Theme.of(context).textTheme.labelLarge,
+          items.isEmpty
+              ? Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(16.0),
+                    color: Theme.of(context).colorScheme.background,
+                    child: Text(
+                      'NOT ENOUGH DATA',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
                   ),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text(
+                          items[index],
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
         ],
       ),
     );

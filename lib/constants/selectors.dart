@@ -11,4 +11,10 @@ class Selectors {
     "l12": "Last 12 Months",
     "py": "Previous Year"
   };
+  static const methodSelectors = {
+    "cash": "Cash",
+    "stripe": "Card",
+    "paypal": "Paypal"
+  };
+  static const statusSelectors = {"true": "Fulfilled", "false": "Unfulfilled"};
 }

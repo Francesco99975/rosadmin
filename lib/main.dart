@@ -5,7 +5,7 @@ import 'package:rosadmin/providers/theme_provider.dart';
 import 'package:rosadmin/providers/user.dart';
 import 'package:option_result/option.dart' as rs;
 import 'package:rosadmin/screens/auth.dart';
-import 'package:rosadmin/screens/dashboard.dart';
+import 'package:rosadmin/screens/dashboard/dashboard.dart';
 import 'package:rosadmin/utils/router.dart';
 
 void main() {

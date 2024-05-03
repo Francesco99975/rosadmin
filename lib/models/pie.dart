@@ -3,22 +3,26 @@ import 'dart:convert';
 class PieItem {
   final String label;
   final double value;
+  final int color;
 
-  PieItem({required this.label, required this.value});
+  PieItem({required this.label, required this.value, required this.color});
 
-  PieItem copyWith({String? label, double? value}) {
-    return PieItem(label: label ?? this.label, value: value ?? this.value);
+  PieItem copyWith({String? label, double? value, int? color}) {
+    return PieItem(
+        label: label ?? this.label,
+        value: value ?? this.value,
+        color: color ?? this.color);
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'label': label,
-      'value': value,
-    };
+    return <String, dynamic>{'label': label, 'value': value, 'color': color};
   }
 
   factory PieItem.fromMap(Map<String, dynamic> map) {
-    return PieItem(label: map['label'], value: map['value']);
+    return PieItem(
+        label: map['label'],
+        value: map['value'].toDouble(),
+        color: map['color']);
   }
 
   String toJson() => jsonEncode(toMap());
@@ -45,7 +49,11 @@ class Pie {
   }
 
   factory Pie.fromMap(Map<String, dynamic> map) {
-    return Pie(title: map['title'], items: List.from(map['items']));
+    return Pie(
+        title: map['title'],
+        items: (map['items'] as List<dynamic>)
+            .map((e) => PieItem.fromMap(e))
+            .toList());
   }
 
   String toJson() => jsonEncode(toMap());
