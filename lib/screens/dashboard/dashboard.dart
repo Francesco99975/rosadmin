@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:rosadmin/providers/user.dart';
 
 import 'package:rosadmin/screens/auth.dart';
+import 'package:rosadmin/screens/dashboard/clientele_stats.dart';
 import 'package:rosadmin/screens/dashboard/finances_stats.dart';
 import 'package:rosadmin/screens/dashboard/traffic_stats.dart';
 
@@ -38,7 +39,7 @@ class DashboardScreen extends ConsumerWidget {
         ),
         drawer: const MainDrawer(),
         body: const TabBarView(
-            children: [TrafficStats(), FinancesStats(), Placeholder()]),
+            children: [TrafficStats(), FinancesStats(), ClienteleStats()]),
         bottomNavigationBar: const TabBar(
           tabs: [
             Tab(icon: Icon(Icons.data_usage)),

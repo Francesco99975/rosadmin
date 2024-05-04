@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rosadmin/models/user.dart';
 import 'package:rosadmin/providers/theme_provider.dart';
@@ -9,6 +10,9 @@ import 'package:rosadmin/screens/dashboard/dashboard.dart';
 import 'package:rosadmin/utils/router.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   runApp(const ProviderScope(child: Rosadmin()));
 }
 

@@ -195,13 +195,29 @@ class _FinancesStatsState extends ConsumerState<FinancesStats> {
                   const Divider(),
                   Center(
                     child: Wrap(
-                      alignment: WrapAlignment.spaceAround,
+                      alignment: WrapAlignment.spaceBetween,
                       children: [
-                        PieChartStats(pie: r.filledPie),
+                        Column(
+                          children: [
+                            const Text("Order Status"),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            PieChartStats(pie: r.filledPie)
+                          ],
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                        PieChartStats(pie: r.methodPie)
+                        Column(
+                          children: [
+                            const Text("Used Methods"),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            PieChartStats(pie: r.methodPie)
+                          ],
+                        ),
                       ],
                     ),
                   ),
