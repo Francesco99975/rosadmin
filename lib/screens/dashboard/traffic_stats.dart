@@ -146,7 +146,7 @@ class _TrafficStatsState extends ConsumerState<TrafficStats> {
                     child: StatisticItem(
                         label: 'Average Visit Duration',
                         value: prettyDuration(
-                            Duration(seconds: r.avgVisitDuration))),
+                            Duration(milliseconds: r.avgVisitDuration))),
                   ),
                   const SizedBox(height: 16.0),
                   Row(

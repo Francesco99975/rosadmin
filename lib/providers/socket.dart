@@ -44,8 +44,11 @@ class SocketChannel {
   }
 
   void authenticate(String otp) {
-    _channel.match(
-        () => null,
+    _channel.match(() {
+      _channel = Option.of(
+          WebSocketChannel.connect(Uri.parse("ws://localhost:8078/ws")));
+      authenticate(otp);
+    },
         (channel) => {
               channel.sink.add(jsonEncode({
                 "type": "authadmin",
@@ -56,5 +59,6 @@ class SocketChannel {
 
   void close() {
     _channel.match(() => null, (channel) => channel.sink.close());
+    _channel = const Option<WebSocketChannel>.none();
   }
 }
