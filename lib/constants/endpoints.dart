@@ -12,4 +12,12 @@ class Endpoints {
   static const financesEndpoint = "$adminBaseUrl/finances";
 
   static const clienteleEndpoint = "$adminBaseUrl/clientele";
+
+  static const categoriesEndpoint = "$adminBaseUrl/categories";
+
+  static const productsEndpoint = "$adminBaseUrl/products";
+
+  static const customersEndpoint = "$adminBaseUrl/customers";
+
+  static const ordersEndpoint = "$adminBaseUrl/orders";
 }

@@ -13,6 +13,8 @@ class Order {
   final DateTime created;
   final DateTime updated;
 
+  int get total => purchases.fold(0, (acc, purchase) => acc + purchase.cost);
+
   Order(
       {required this.id,
       required this.customer,

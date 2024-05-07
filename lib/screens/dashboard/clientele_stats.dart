@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:rosadmin/constants/selectors.dart';
 import 'package:rosadmin/providers/clintl.dart';
 import 'package:rosadmin/providers/socket.dart';
+import 'package:rosadmin/screens/error.dart';
+import 'package:rosadmin/screens/loading.dart';
 import 'package:rosadmin/widgets/card_list.dart';
 import 'package:rosadmin/widgets/statistic_item.dart';
 import 'package:rosadmin/widgets/stats_chart.dart';
@@ -48,8 +50,12 @@ class _ClienteleStatsState extends ConsumerState<ClienteleStats> {
         NumberFormat.simpleCurrency(locale: 'en_CA', name: 'CAD');
 
     return switch (clientele) {
-      AsyncData(:final value) =>
-        value.match((l) => Text('server error: ${l.message}'), (r) {
+      AsyncData(:final value) => value.match(
+            (l) => ErrorScreen(
+                errorMessage: 'server error: ${l.message}',
+                onRetry: () =>
+                    ref.refresh(clintlProvider(selectedTimeframe).future)),
+            (r) {
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -121,10 +127,10 @@ class _ClienteleStatsState extends ConsumerState<ClienteleStats> {
             ),
           );
         }),
-      AsyncError(:final error) => Text('runtime error: $error'),
-      _ => const Center(
-          child: CircularProgressIndicator(),
-        ),
+      AsyncError(:final error) => ErrorScreen(
+          errorMessage: 'runtime error: $error',
+          onRetry: () => ref.refresh(clintlProvider(selectedTimeframe).future)),
+      _ => const LoadingScreen(),
     };
   }
 }
