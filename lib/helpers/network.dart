@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rosadmin/helpers/failure.dart';
@@ -27,7 +26,7 @@ class Network extends _$Network {
               (t) => Right(NetworkRepo(authToken: Option<String>.of(t.token))));
         }),
       AsyncError(:final error) => Left(Failure(message: error.toString())),
-      _ => Left(Failure(message: "Network not responding unexpectedly"))
+      _ => Left(Failure(message: "Network responding unexpectedly"))
     };
   }
 }

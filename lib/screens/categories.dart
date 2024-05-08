@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rosadmin/models/category.dart';
 import 'package:rosadmin/providers/categories.dart';
 import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 import 'package:rosadmin/widgets/category_item.dart';
 import 'package:rosadmin/widgets/empty.dart';
+import 'package:rosadmin/widgets/main_drawer.dart';
 
 class CategoryScreen extends ConsumerStatefulWidget {
   const CategoryScreen({super.key});
@@ -83,6 +85,9 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
           return Scaffold(
             appBar: AppBar(
               title: const Text('Categories'),
+            ),
+            drawer: const MainDrawer(
+              active: CategoryScreen.routePath,
             ),
             body: categoryList.isEmpty
                 ? const EmptyListMessage(

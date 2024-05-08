@@ -37,7 +37,9 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ],
         ),
-        drawer: const MainDrawer(),
+        drawer: const MainDrawer(
+          active: DashboardScreen.routePath,
+        ),
         body: const TabBarView(
             children: [TrafficStats(), FinancesStats(), ClienteleStats()]),
         bottomNavigationBar: const TabBar(

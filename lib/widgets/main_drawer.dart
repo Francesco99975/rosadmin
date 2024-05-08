@@ -4,7 +4,8 @@ import 'package:rosadmin/screens/categories.dart';
 import 'package:rosadmin/screens/dashboard/dashboard.dart';
 
 class MainDrawer extends StatelessWidget {
-  const MainDrawer({super.key});
+  final String active;
+  const MainDrawer({super.key, required this.active});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,12 @@ class MainDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.dashboard_outlined),
+            leading: Icon(
+              Icons.dashboard_outlined,
+              color: active == DashboardScreen.routePath
+                  ? Theme.of(context).colorScheme.secondary
+                  : Colors.white,
+            ),
             title: const Text('Dashboard'),
             onTap: () => context.go(DashboardScreen.routePath),
           ),
@@ -39,7 +45,12 @@ class MainDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.category_outlined),
+            leading: Icon(
+              Icons.category_outlined,
+              color: active == DashboardScreen.routePath
+                  ? Theme.of(context).colorScheme.secondary
+                  : Colors.white,
+            ),
             title: const Text('Categories'),
             onTap: () => context.go(CategoryScreen.routePath),
           ),
