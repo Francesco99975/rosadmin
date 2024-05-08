@@ -12,11 +12,13 @@ Future<Either<Failure, Visit>> visits(
     VisitsRef ref, String quality, String timeframe) async {
   final network = ref.read(networkProvider);
 
-  final response = await network.getRequest(
-    url: "${Endpoints.visitsEndpoint}?quality=$quality&timeframe=$timeframe",
-  );
+  return network.match((l) => Left(l), (network) async {
+    final response = await network.getRequest(
+      url: "${Endpoints.visitsEndpoint}?quality=$quality&timeframe=$timeframe",
+    );
 
-  return response.match((l) => Left(l), (r) {
-    return Right(Visit.fromJson(r.body));
+    return response.match((l) => Left(l), (r) {
+      return Right(Visit.fromJson(r.body));
+    });
   });
 }

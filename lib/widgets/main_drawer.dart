@@ -22,6 +22,7 @@ class MainDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
+            leading: const Icon(Icons.dashboard_outlined),
             title: const Text('Dashboard'),
             onTap: () => context.go(DashboardScreen.routePath),
           ),
@@ -38,6 +39,7 @@ class MainDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.category_outlined),
             title: const Text('Categories'),
             onTap: () => context.go(CategoryScreen.routePath),
           ),

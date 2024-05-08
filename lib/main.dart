@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:rosadmin/models/user.dart';
 import 'package:rosadmin/providers/theme_provider.dart';
 import 'package:rosadmin/providers/user.dart';
-import 'package:option_result/option.dart' as rs;
 import 'package:rosadmin/screens/auth.dart';
 import 'package:rosadmin/screens/dashboard/dashboard.dart';
 import 'package:rosadmin/utils/router.dart';
+import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,14 +50,13 @@ class _SplashViewState extends ConsumerState<SplashView> {
   Widget build(BuildContext context) {
     final userx = ref.watch(userxProvider);
 
-    return Scaffold(
-        backgroundColor: Theme.of(context).primaryColorDark,
-        body: switch (userx.value) {
-          rs.Some<User>() => const DashboardScreen(),
-          rs.None<User>() => const AuthScreen(),
-          null => const Center(
-              child: Text("Error"),
-            ),
-        });
+    return AsyncProviderWrapper<Option<User>>(
+      state: userx,
+      onRetry: () => ref.refresh(userxProvider.future),
+      render: (ouser) {
+        return ouser.match(
+            () => const AuthScreen(), (_) => const DashboardScreen());
+      },
+    );
   }
 }

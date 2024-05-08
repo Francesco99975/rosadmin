@@ -15,27 +15,33 @@ class Customers extends _$Customers {
   Future<Either<Failure, List<Customer>>> build() async {
     final network = ref.read(networkProvider);
 
-    final response = await network.getRequest(
-      url: Endpoints.customersEndpoint,
-    );
+    return network.match((l) => Left(Failure(message: l.message)),
+        (network) async {
+      final response = await network.getRequest(
+        url: Endpoints.customersEndpoint,
+      );
 
-    return response.match((l) => Left(l), (r) {
-      final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
-      return Right((data.map((e) => Customer.fromMap(e)).toList()));
+      return response.match((l) => Left(l), (r) {
+        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        return Right((data.map((e) => Customer.fromMap(e)).toList()));
+      });
     });
   }
 
   Future<Either<Failure, Customer>> remove(Customer customer) async {
     final network = ref.read(networkProvider);
 
-    final response = await network.deleteRequest(
-        url: "${Endpoints.customersEndpoint}/${customer.id}");
+    return network.match((l) => Left(Failure(message: l.message)),
+        (network) async {
+      final response = await network.deleteRequest(
+          url: "${Endpoints.customersEndpoint}/${customer.id}");
 
-    return response.match((l) => Left(l), (r) {
-      final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
-      final updatedState = (data.map((e) => Customer.fromMap(e)).toList());
-      state = AsyncValue.data(Right(updatedState));
-      return Right(updatedState.last);
+      return response.match((l) => Left(l), (r) {
+        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        final updatedState = (data.map((e) => Customer.fromMap(e)).toList());
+        state = AsyncValue.data(Right(updatedState));
+        return Right(updatedState.last);
+      });
     });
   }
 }

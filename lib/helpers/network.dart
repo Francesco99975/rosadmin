@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:option_result/option.dart' as rs;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rosadmin/helpers/failure.dart';
 import 'package:rosadmin/helpers/types.dart';
-import 'package:rosadmin/models/user.dart';
 import 'package:rosadmin/providers/user.dart';
 import 'package:rosadmin/res/strings.dart';
 import 'package:rosadmin/utils/config.dart';
@@ -17,26 +16,30 @@ part 'network.g.dart';
 @riverpod
 class Network extends _$Network {
   @override
-  NetworkRepo build() {
+  Either<Failure, NetworkRepo> build() {
     final user = ref.watch(userxProvider);
 
-    return switch (user.value) {
-      rs.Some<User>(:final value) =>
-        NetworkRepo(authToken: rs.Some<String>(value.token)),
-      rs.None<User>() => NetworkRepo(authToken: const rs.None<String>()),
-      null => NetworkRepo(authToken: const rs.None<String>()),
+    return switch (user) {
+      AsyncData(:final value) =>
+        value.match((l) => Left(Failure(message: l.message)), (r) {
+          return r.match(
+              () => Right(NetworkRepo(authToken: const Option<String>.none())),
+              (t) => Right(NetworkRepo(authToken: Option<String>.of(t.token))));
+        }),
+      AsyncError(:final error) => Left(Failure(message: error.toString())),
+      _ => Left(Failure(message: "Network not responding unexpectedly"))
     };
   }
 }
 
 class NetworkRepo {
-  final rs.Option<String> _authToken;
+  final Option<String> _authToken;
 
-  NetworkRepo({required rs.Option<String> authToken}) : _authToken = authToken;
+  NetworkRepo({required Option<String> authToken}) : _authToken = authToken;
 
   FutureEither<Response> getRequest(
       {required String url, bool requireAuth = true}) async {
-    final token = _authToken.unwrapOr("");
+    final token = _authToken.getOrElse(() => "");
     final Map<String, String> requestHeaders = {
       "Content-Type": "application/json",
       "Cookie": "token=$token"
@@ -68,7 +71,7 @@ class NetworkRepo {
       }
     }
 
-    final tkn = _authToken.unwrapOr("");
+    final tkn = _authToken.getOrElse(() => "");
     final Map<String, String> requestHeaders = {
       "Content-Type": "application/json",
       "Cookie": "token=$tkn",
@@ -98,7 +101,7 @@ class NetworkRepo {
       }
     }
 
-    final tkn = _authToken.unwrapOr("");
+    final tkn = _authToken.getOrElse(() => "");
     final Map<String, String> requestHeaders = {
       "Content-Type": "application/json",
       "Cookie": "token=$tkn"
@@ -131,7 +134,7 @@ class NetworkRepo {
       }
     }
 
-    final tkn = _authToken.unwrapOr("");
+    final tkn = _authToken.getOrElse(() => "");
     final Map<String, String> requestHeaders = {
       "Content-Type": "application/json",
       "Cookie": "token=$tkn"

@@ -12,12 +12,15 @@ Future<Either<Failure, Finances>> fins(
     FinsRef ref, String timeframe, String method, String status) async {
   final network = ref.read(networkProvider);
 
-  final response = await network.getRequest(
-    url:
-        "${Endpoints.financesEndpoint}?timeframe=$timeframe&method=$method&status=$status",
-  );
+  return network.match((l) => Left(Failure(message: l.message)),
+      (network) async {
+    final response = await network.getRequest(
+      url:
+          "${Endpoints.financesEndpoint}?timeframe=$timeframe&method=$method&status=$status",
+    );
 
-  return response.match((l) => Left(l), (r) {
-    return Right(Finances.fromJson(r.body));
+    return response.match((l) => Left(l), (r) {
+      return Right(Finances.fromJson(r.body));
+    });
   });
 }

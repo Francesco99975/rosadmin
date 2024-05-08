@@ -6,12 +6,12 @@ part of 'network.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$networkHash() => r'016a3e2733dc392eabf062a9a3ab0abbb31cac0b';
+String _$networkHash() => r'68b733f105229a2840bf39daf5516703f3d4dd89';
 
 /// See also [Network].
 @ProviderFor(Network)
 final networkProvider =
-    AutoDisposeNotifierProvider<Network, NetworkRepo>.internal(
+    AutoDisposeNotifierProvider<Network, Either<Failure, NetworkRepo>>.internal(
   Network.new,
   name: r'networkProvider',
   debugGetCreateSourceHash:
@@ -20,6 +20,6 @@ final networkProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$Network = AutoDisposeNotifier<NetworkRepo>;
+typedef _$Network = AutoDisposeNotifier<Either<Failure, NetworkRepo>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

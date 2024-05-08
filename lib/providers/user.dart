@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart';
-import 'package:option_result/option_result.dart' as rs;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rosadmin/constants/endpoints.dart';
+import 'package:rosadmin/helpers/failure.dart';
 import 'package:rosadmin/models/user.dart';
 import 'package:rosadmin/providers/socket.dart';
 import 'package:rosadmin/providers/storage.dart';
@@ -13,7 +14,7 @@ part 'user.g.dart';
 @riverpod
 class Userx extends _$Userx {
   @override
-  Future<rs.Option<User>> build() async {
+  Future<Either<Failure, Option<User>>> build() async {
     final storage = ref.read(storageProvider);
     final userJson = await storage.read(key: "USER");
     final socket = ref.read(socketProvider);
@@ -30,23 +31,26 @@ class Userx extends _$Userx {
             body: jsonEncode({"token": user.token}), headers: requestHeaders);
 
         if (response.statusCode >= 400) {
-          return const rs.None<User>();
+          final error = jsonDecode(response.body);
+          return Left(Failure(
+              message: "HTTP error: ${error["message"]}",
+              stackTrace: error["errors"]));
         }
 
         final check = jsonDecode(response.body);
 
         if (!check["valid"]) {
-          return const rs.None<User>();
+          return Left(Failure(message: "Token not valid"));
         }
 
         socket.authenticate(check["otp"]);
 
-        return rs.Some<User>(user);
-      } catch (e) {
-        return const rs.None<User>();
+        return Right(Option<User>.of(user));
+      } catch (e, stktrc) {
+        return Left(Failure(message: e.toString(), stackTrace: stktrc));
       }
     } else {
-      return const rs.None<User>();
+      return const Right(Option<User>.none());
     }
   }
 
@@ -57,7 +61,7 @@ class Userx extends _$Userx {
     final socket = ref.read(socketProvider);
     socket.authenticate(otp);
 
-    state = AsyncData(rs.Some<User>(user));
+    state = AsyncData(Right(Option<User>.of(user)));
   }
 
   Future<void> logout() async {
@@ -65,6 +69,6 @@ class Userx extends _$Userx {
     socket.close();
     final storage = ref.read(storageProvider);
     await storage.delete(key: "USER");
-    state = const AsyncData(rs.None<User>());
+    state = const AsyncData(Right(Option<User>.none()));
   }
 }

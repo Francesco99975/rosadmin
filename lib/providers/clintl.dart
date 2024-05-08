@@ -12,11 +12,14 @@ Future<Either<Failure, Clientele>> clintl(
     ClintlRef ref, String timeframe) async {
   final network = ref.read(networkProvider);
 
-  final response = await network.getRequest(
-    url: "${Endpoints.clienteleEndpoint}?timeframe=$timeframe",
-  );
+  return network.match((l) => Left(Failure(message: l.message)),
+      (network) async {
+    final response = await network.getRequest(
+      url: "${Endpoints.clienteleEndpoint}?timeframe=$timeframe",
+    );
 
-  return response.match((l) => Left(l), (r) {
-    return Right(Clientele.fromJson(r.body));
+    return response.match((l) => Left(l), (r) {
+      return Right(Clientele.fromJson(r.body));
+    });
   });
 }

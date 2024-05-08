@@ -30,29 +30,32 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
     final network = ref.read(networkProvider);
     final userx = ref.read(userxProvider.notifier);
-    var response = await AuthRepo.login(email, password, network);
 
-    final _ = switch (response) {
-      Left(value: final l) => {
-          if (mounted)
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(l.message),
-              duration: const Duration(seconds: 5),
-            ))
-        },
-      Right(value: final data) => {
-          await userx.setUser(
-              User(
-                  id: data.user.id,
-                  username: data.user.username,
-                  email: data.user.email,
-                  role: data.user.role,
-                  token: data.token),
-              data.otp)
-        },
-    };
-    loading = false;
-    return const Right(null);
+    return network.match((l) => Left(l), (network) async {
+      var response = await AuthRepo.login(email, password, network);
+
+      final _ = switch (response) {
+        Left(value: final l) => {
+            if (mounted)
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(l.message),
+                duration: const Duration(seconds: 5),
+              ))
+          },
+        Right(value: final data) => {
+            await userx.setUser(
+                User(
+                    id: data.user.id,
+                    username: data.user.username,
+                    email: data.user.email,
+                    role: data.user.role,
+                    token: data.token),
+                data.otp)
+          },
+      };
+      loading = false;
+      return const Right(null);
+    });
   }
 
   @override
