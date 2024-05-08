@@ -6,10 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:rosadmin/constants/selectors.dart';
 import 'package:rosadmin/helpers/prettifier.dart';
+import 'package:rosadmin/models/visit.dart';
 import 'package:rosadmin/providers/socket.dart';
 import 'package:rosadmin/providers/visits.dart';
-import 'package:rosadmin/screens/error.dart';
-import 'package:rosadmin/screens/loading.dart';
+import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 import 'package:rosadmin/widgets/card_list.dart';
 import 'package:rosadmin/widgets/statistic_item.dart';
 import 'package:rosadmin/widgets/stats_chart.dart';
@@ -50,13 +50,11 @@ class _TrafficStatsState extends ConsumerState<TrafficStats> {
     final visits =
         ref.watch(visitsProvider(selectedQuality, selectedTimeframe));
 
-    return switch (visits) {
-      AsyncData(:final value) => value.match(
-            (l) => ErrorScreen(
-                errorMessage: "server error: ${l.message}",
-                onRetry: () => ref.refresh(
-                    visitsProvider(selectedQuality, selectedTimeframe).future)),
-            (r) {
+    return AsyncProviderWrapper<Visit>(
+        state: visits,
+        onRetry: () => ref
+            .refresh(visitsProvider(selectedQuality, selectedTimeframe).future),
+        render: (r) {
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -182,12 +180,6 @@ class _TrafficStatsState extends ConsumerState<TrafficStats> {
               ),
             ),
           );
-        }),
-      AsyncError(:final error) => ErrorScreen(
-          errorMessage: "runtime error: $error",
-          onRetry: () => ref.refresh(
-              visitsProvider(selectedQuality, selectedTimeframe).future)),
-      _ => const LoadingScreen()
-    };
+        });
   }
 }

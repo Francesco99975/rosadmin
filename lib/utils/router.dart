@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rosadmin/main.dart';
 import 'package:rosadmin/screens/auth.dart';
+import 'package:rosadmin/screens/categories.dart';
 import 'package:rosadmin/screens/dashboard/dashboard.dart';
 
 final GoRouter router = GoRouter(
@@ -25,5 +26,10 @@ final GoRouter router = GoRouter(
         return const AuthScreen();
       },
     ),
+    GoRoute(
+        path: CategoryScreen.routePath,
+        builder: (BuildContext context, GoRouterState state) {
+          return const CategoryScreen();
+        }),
   ],
 );

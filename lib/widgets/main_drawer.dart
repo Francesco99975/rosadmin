@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:rosadmin/screens/categories.dart';
+import 'package:rosadmin/screens/dashboard/dashboard.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({super.key});
@@ -20,44 +23,34 @@ class MainDrawer extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Dashboard'),
-            onTap: () {
-              Navigator.pop(context);
-              // Navigate to the dashboard page
-            },
+            onTap: () => context.go(DashboardScreen.routePath),
           ),
           ListTile(
             title: const Text('Orders'),
             onTap: () {
               Navigator.pop(context);
-              // Navigate to the analytics page
             },
           ),
           ListTile(
             title: const Text('Products'),
             onTap: () {
               Navigator.pop(context);
-              // Navigate to the settings page
             },
           ),
           ListTile(
             title: const Text('Categories'),
-            onTap: () {
-              Navigator.pop(context);
-              // Navigate to the settings page
-            },
+            onTap: () => context.go(CategoryScreen.routePath),
           ),
           ListTile(
             title: const Text('Customers'),
             onTap: () {
               Navigator.pop(context);
-              // Navigate to the settings page
             },
           ),
           ListTile(
             title: const Text('Settings'),
             onTap: () {
               Navigator.pop(context);
-              // Navigate to the settings page
             },
           ),
         ],

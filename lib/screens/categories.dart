@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rosadmin/models/category.dart';
 import 'package:rosadmin/providers/categories.dart';
-import 'package:rosadmin/screens/error.dart';
-import 'package:rosadmin/screens/loading.dart';
+import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 import 'package:rosadmin/widgets/category_item.dart';
 import 'package:rosadmin/widgets/empty.dart';
 
@@ -77,12 +76,10 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
   Widget build(BuildContext context) {
     final categories = ref.watch(categoriesProvider);
 
-    return switch (categories) {
-      AsyncData(:final value) => value.match(
-            (l) => ErrorScreen(
-                errorMessage: "server error: ${l.message}",
-                onRetry: () => ref.refresh(categoriesProvider.future)),
-            (categoryList) {
+    return AsyncProviderWrapper<List<Category>>(
+        state: categories,
+        onRetry: () => ref.refresh(categoriesProvider.future),
+        render: (categoryList) {
           return Scaffold(
             appBar: AppBar(
               title: const Text('Categories'),
@@ -96,8 +93,72 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                     itemBuilder: (context, index) {
                       final category = categoryList[index];
                       return Dismissible(
-                          key: Key(category.id),
-                          child: CategoryItem(categoryName: category.name));
+                        key: Key(category.id),
+                        background: Container(
+                          padding: const EdgeInsets.only(right: 20),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 4.0),
+                          color: Theme.of(context).colorScheme.error,
+                          alignment: Alignment.centerRight,
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                        ),
+                        confirmDismiss: (direction) async {
+                          if (direction == DismissDirection.endToStart) {
+                            return await showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog.adaptive(
+                                      title: const Text("Are you sure?"),
+                                      content: const Text(
+                                          "Do you want to delete this category?"),
+                                      actions: <Widget>[
+                                        ElevatedButton(
+                                          child: const Text("No"),
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                        ),
+                                        ElevatedButton(
+                                          child: const Text("Yes"),
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(true),
+                                        ),
+                                      ],
+                                    ));
+                          }
+
+                          return false;
+                        },
+                        onDismissed: (direction) async {
+                          if (direction == DismissDirection.endToStart) {
+                            final response = await ref
+                                .read(categoriesProvider.notifier)
+                                .remove(category);
+
+                            response.match((l) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(l.message),
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.error,
+                                duration: const Duration(seconds: 5),
+                              ));
+                            }, (r) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                    "${r.name} added to Categories Successfully"),
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.onBackground,
+                                duration: const Duration(seconds: 5),
+                              ));
+                            });
+                          }
+                        },
+                        child: CategoryItem(categoryName: category.name),
+                      );
                     },
                   ),
             floatingActionButton: FloatingActionButton(
@@ -106,11 +167,6 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
               child: const Icon(Icons.add),
             ),
           );
-        }),
-      AsyncError(:final error) => ErrorScreen(
-          errorMessage: "runtime error: $error",
-          onRetry: () => ref.refresh(categoriesProvider.future)),
-      _ => const LoadingScreen()
-    };
+        });
   }
 }

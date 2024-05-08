@@ -6,10 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intl/intl.dart';
 import 'package:rosadmin/constants/selectors.dart';
+import 'package:rosadmin/models/clientele.dart';
 import 'package:rosadmin/providers/clintl.dart';
 import 'package:rosadmin/providers/socket.dart';
-import 'package:rosadmin/screens/error.dart';
-import 'package:rosadmin/screens/loading.dart';
+import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 import 'package:rosadmin/widgets/card_list.dart';
 import 'package:rosadmin/widgets/statistic_item.dart';
 import 'package:rosadmin/widgets/stats_chart.dart';
@@ -49,13 +49,10 @@ class _ClienteleStatsState extends ConsumerState<ClienteleStats> {
     final moneyFormatter =
         NumberFormat.simpleCurrency(locale: 'en_CA', name: 'CAD');
 
-    return switch (clientele) {
-      AsyncData(:final value) => value.match(
-            (l) => ErrorScreen(
-                errorMessage: 'server error: ${l.message}',
-                onRetry: () =>
-                    ref.refresh(clintlProvider(selectedTimeframe).future)),
-            (r) {
+    return AsyncProviderWrapper<Clientele>(
+        state: clientele,
+        onRetry: () => ref.refresh(clintlProvider(selectedTimeframe).future),
+        render: (r) {
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -126,11 +123,6 @@ class _ClienteleStatsState extends ConsumerState<ClienteleStats> {
               ),
             ),
           );
-        }),
-      AsyncError(:final error) => ErrorScreen(
-          errorMessage: 'runtime error: $error',
-          onRetry: () => ref.refresh(clintlProvider(selectedTimeframe).future)),
-      _ => const LoadingScreen(),
-    };
+        });
   }
 }

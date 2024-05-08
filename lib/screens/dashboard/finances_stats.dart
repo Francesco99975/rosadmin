@@ -6,10 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intl/intl.dart';
 import 'package:rosadmin/constants/selectors.dart';
+import 'package:rosadmin/models/finances.dart';
 import 'package:rosadmin/providers/fins.dart';
 import 'package:rosadmin/providers/socket.dart';
-import 'package:rosadmin/screens/error.dart';
-import 'package:rosadmin/screens/loading.dart';
+import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 import 'package:rosadmin/widgets/card_list.dart';
 import 'package:rosadmin/widgets/pie_chart_stats.dart';
 import 'package:rosadmin/widgets/statistic_item.dart';
@@ -57,13 +57,12 @@ class _FinancesStatsState extends ConsumerState<FinancesStats> {
         NumberFormat.simpleCurrency(locale: 'en_CA', name: 'CAD');
     final dateFormatter = DateFormat.yMMMd();
 
-    return switch (financials) {
-      AsyncData(:final value) => value.match(
-            (l) => ErrorScreen(
-                errorMessage: 'server error: ${l.message}',
-                onRetry: () => ref.refresh(finsProvider(
-                        selectedTimeframe, selectedMethod, selectedStatus)
-                    .future)), (r) {
+    return AsyncProviderWrapper<Finances>(
+        state: financials,
+        onRetry: () => ref.refresh(
+            finsProvider(selectedTimeframe, selectedMethod, selectedStatus)
+                .future),
+        render: (r) {
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -284,13 +283,6 @@ class _FinancesStatsState extends ConsumerState<FinancesStats> {
               ),
             ),
           );
-        }),
-      AsyncError(:final error) => ErrorScreen(
-          errorMessage: 'runtime error: $error',
-          onRetry: () => ref.refresh(
-              finsProvider(selectedTimeframe, selectedMethod, selectedStatus)
-                  .future)),
-      _ => const LoadingScreen()
-    };
+        });
   }
 }
