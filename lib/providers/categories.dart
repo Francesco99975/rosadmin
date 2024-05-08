@@ -22,8 +22,12 @@ class Categories extends _$Categories {
       );
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
-        print(data);
+        if (r.statusCode >= 400) {
+          final errorResponse = jsonDecode(r.body);
+          return Left(Failure(message: errorResponse["message"]));
+        }
+
+        final List<dynamic> data = jsonDecode(r.body);
         return Right((data.map((e) => Category.fromMap(e)).toList()));
       });
     });
@@ -38,7 +42,12 @@ class Categories extends _$Categories {
           url: Endpoints.categoriesEndpoint, body: category.toMap());
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        if (r.statusCode >= 400) {
+          final errorResponse = jsonDecode(r.body);
+          return Left(Failure(message: errorResponse["message"]));
+        }
+
+        final List<dynamic> data = jsonDecode(r.body);
         final updatedState = (data.map((e) => Category.fromMap(e)).toList());
         state = AsyncValue.data(Right(updatedState));
         return Right(updatedState.last);
@@ -55,7 +64,12 @@ class Categories extends _$Categories {
           url: "${Endpoints.categoriesEndpoint}/${category.id}");
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        if (r.statusCode >= 400) {
+          final errorResponse = jsonDecode(r.body);
+          return Left(Failure(message: errorResponse["message"]));
+        }
+
+        final List<dynamic> data = jsonDecode(r.body);
         final updatedState = (data.map((e) => Category.fromMap(e)).toList());
         state = AsyncValue.data(Right(updatedState));
         return Right(updatedState.last);

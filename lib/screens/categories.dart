@@ -62,7 +62,23 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                 onPressed: () async {
                   final category =
                       Category(id: "", name: _categoryController.text);
-                  await ref.read(categoriesProvider.notifier).add(category);
+                  final response =
+                      await ref.read(categoriesProvider.notifier).add(category);
+                  response.match((l) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(l.message),
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      duration: const Duration(seconds: 5),
+                    ));
+                  }, (r) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content:
+                          Text("${r.name} added to Categories Successfully"),
+                      backgroundColor:
+                          Theme.of(context).colorScheme.onBackground,
+                      duration: const Duration(seconds: 5),
+                    ));
+                  });
                   if (context.mounted) Navigator.of(context).pop();
                 },
                 child: const Text('Submit'),
@@ -94,6 +110,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                     message: "No categories yet", iconData: Icons.error_outline)
                 : ListView.builder(
                     padding: const EdgeInsets.only(bottom: 56),
+                    shrinkWrap: true,
                     itemCount: categoryList.length,
                     itemBuilder: (context, index) {
                       final category = categoryList[index];
@@ -154,7 +171,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                 content: Text(
-                                    "${r.name} added to Categories Successfully"),
+                                    "${r.name} removed from Categories Successfully"),
                                 backgroundColor:
                                     Theme.of(context).colorScheme.onBackground,
                                 duration: const Duration(seconds: 5),

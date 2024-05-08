@@ -11,7 +11,7 @@ import 'package:rosadmin/providers/storage.dart';
 
 part 'user.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Userx extends _$Userx {
   @override
   Future<Either<Failure, Option<User>>> build() async {

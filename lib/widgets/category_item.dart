@@ -13,14 +13,11 @@ class CategoryItem extends StatelessWidget {
     return ListTile(
       title: Text(
         categoryName,
-        style: const TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.secondary),
       ),
-      onTap: () {
-        // Handle tap event here, if needed
-      },
     );
   }
 }
