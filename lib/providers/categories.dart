@@ -72,7 +72,7 @@ class Categories extends _$Categories {
         final List<dynamic> data = jsonDecode(r.body);
         final updatedState = (data.map((e) => Category.fromMap(e)).toList());
         state = AsyncValue.data(Right(updatedState));
-        return Right(updatedState.last);
+        return Right(category);
       });
     });
   }

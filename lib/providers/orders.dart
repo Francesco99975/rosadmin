@@ -74,7 +74,7 @@ class Orders extends _$Orders {
         final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
         final updatedState = (data.map((e) => model.Order.fromMap(e)).toList());
         state = AsyncValue.data(Right(updatedState));
-        return Right(updatedState.last);
+        return Right(order);
       });
     });
   }

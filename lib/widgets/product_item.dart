@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:go_router/go_router.dart';
+import 'package:rosadmin/helpers/failure.dart';
+import 'package:rosadmin/models/product.dart';
+import 'package:rosadmin/utils/snackbar_service.dart';
 
 class ProductItem extends StatelessWidget {
   final String productName;
@@ -6,15 +11,20 @@ class ProductItem extends StatelessWidget {
   final double price;
   final bool isPublished;
   final bool isFeatured;
+  final Function(bool) onPublishedChange;
+  final Function(bool) onFeaturedChange;
+  final Future<Either<Failure, Product>> Function() onDelete;
 
-  const ProductItem({
-    super.key,
-    required this.productName,
-    required this.category,
-    required this.price,
-    required this.isPublished,
-    required this.isFeatured,
-  });
+  const ProductItem(
+      {super.key,
+      required this.productName,
+      required this.category,
+      required this.price,
+      required this.isPublished,
+      required this.isFeatured,
+      required this.onPublishedChange,
+      required this.onFeaturedChange,
+      required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +37,7 @@ class ProductItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InkWell(
-              onTap: () {
-                // Go to product details page here
-              },
+              onTap: () => context.go(""),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -68,10 +76,10 @@ class ProductItem extends StatelessWidget {
                   Column(
                     children: [
                       const Text('Published'),
-                      Switch(
+                      Switch.adaptive(
                         value: isPublished,
                         onChanged: (value) {
-                          // Handle switch change here
+                          onPublishedChange(value);
                         },
                       ),
                     ],
@@ -80,10 +88,10 @@ class ProductItem extends StatelessWidget {
                   Column(
                     children: [
                       const Text('Featured'),
-                      Switch(
+                      Switch.adaptive(
                         value: isFeatured,
                         onChanged: (value) {
-                          // Handle switch change here
+                          onFeaturedChange(value);
                         },
                       ),
                     ],
@@ -91,6 +99,62 @@ class ProductItem extends StatelessWidget {
                 ],
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.errorContainer),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Confirm Removal'),
+                        content: const Text(
+                            'Are you sure you want to delete this product?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Close dialog
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              final response = await onDelete();
+
+                              if (context.mounted) {
+                                Navigator.of(context).pop(); // Close dialog
+                              }
+
+                              response.match(
+                                  (l) => SnackBarService.showNegativeSnackBar(
+                                      context: context, message: l.message),
+                                  (r) => SnackBarService.showPositiveSnackBar(
+                                      context: context,
+                                      message:
+                                          "${r.name} removed from products"));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.errorContainer,
+                            ),
+                            child: const Text('Delete'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: const Text('DELETE PRODUCT',
+                    style: TextStyle(color: Colors.white)),
+              ),
+            ),
+            const SizedBox(height: 8),
           ],
         ),
       ),
