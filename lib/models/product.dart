@@ -62,13 +62,11 @@ class Product {
       'name': name,
       'description': description,
       'price': price,
-      'image': image,
+      'file': image,
       'featured': featured,
       'published': published,
-      'category': category.toMap(),
+      'category_id': category.id,
       'weighed': weighed,
-      'created': created.toIso8601String(),
-      'updated': updated.toIso8601String(),
     };
   }
 

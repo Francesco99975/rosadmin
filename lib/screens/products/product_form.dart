@@ -1,10 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rosadmin/models/category.dart';
+import 'package:rosadmin/models/product.dart';
+import 'package:rosadmin/providers/products.dart';
+import 'package:rosadmin/utils/snackbar_service.dart';
 
-class ProductFormScreen extends StatefulWidget {
+class ProductFormScreen extends ConsumerStatefulWidget {
   final bool isNewProduct;
+  final String? pid;
   final String? name;
   final String? description;
   final double? price;
@@ -15,6 +21,7 @@ class ProductFormScreen extends StatefulWidget {
   const ProductFormScreen({
     super.key,
     required this.isNewProduct,
+    this.pid,
     this.name,
     this.description,
     this.price,
@@ -24,11 +31,12 @@ class ProductFormScreen extends StatefulWidget {
   });
 
   @override
-  State<ProductFormScreen> createState() => _ProductFormScreenState();
+  ConsumerState<ProductFormScreen> createState() => _ProductFormScreenState();
 }
 
-class _ProductFormScreenState extends State<ProductFormScreen> {
+class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
   final _formKey = GlobalKey<FormState>();
+  late String _id;
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
   late TextEditingController _priceController;
@@ -39,10 +47,14 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.name);
-    _descriptionController = TextEditingController(text: widget.description);
-    _priceController = TextEditingController(text: widget.price?.toString());
-    _categoryController = TextEditingController(text: widget.category);
+    _id = widget.pid ?? "";
+    _nameController = TextEditingController(text: widget.name ?? "");
+    _descriptionController =
+        TextEditingController(text: widget.description ?? "");
+    _priceController =
+        TextEditingController(text: widget.price?.toString() ?? "");
+    _categoryController = TextEditingController(
+        text: widget.category ?? ""); //Fix This shoould be dropdown
     _weighed = widget.weighed ?? false;
   }
 
@@ -68,7 +80,43 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Text form fields remain the same
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: 'Name'),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(labelText: 'Description'),
+                  maxLines: 3,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _priceController,
+                  decoration: const InputDecoration(labelText: 'Price'),
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _categoryController,
+                  decoration: const InputDecoration(
+                      labelText: 'Category'), //Fix This shoould be dropdown
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Text('Weighed'),
+                    const Spacer(),
+                    Switch(
+                      value: _weighed,
+                      onChanged: (value) {
+                        setState(() {
+                          _weighed = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 16),
                 _imagePickerButton(),
                 const SizedBox(height: 16),
@@ -123,28 +171,43 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     }
   }
 
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      // Form is valid, send form data
-      final formData = {
-        'name': _nameController.text,
-        'description': _descriptionController.text,
-        'price': double.parse(_priceController.text),
-        'category': _categoryController.text,
-        'weighed': _weighed,
-        // Include image file in form data if available
-        'image': _image,
-      };
+  Future<void> _submitForm() async {
+    try {
+      if (_formKey.currentState!.validate()) {
+        final priceSpec = (double.parse(_priceController.text) * 100).toInt();
 
-      // Send form data to server
-      _uploadFormData(formData);
+        final product = Product(
+            id: _id,
+            name: _nameController.text,
+            description: _descriptionController.text,
+            price: priceSpec,
+            image: _image!.path,
+            featured: false,
+            published: true,
+            category: Category(
+                id: _categoryController.text,
+                name: ""), //Fix This shoould be dropdown
+            weighed: _weighed,
+            created: DateTime.now(),
+            updated: DateTime.now());
+
+        final response = widget.isNewProduct
+            ? await ref.read(productsProvider.notifier).add(product)
+            : await ref.read(productsProvider.notifier).updateProduct(product);
+
+        response.match(
+            (l) => SnackBarService.showNegativeSnackBar(
+                context: context, message: l.message),
+            (r) => SnackBarService.showPositiveSnackBar(
+                context: context,
+                message: "${r.name} added to products successfully"));
+      }
+    } catch (e) {
+      if (mounted) {
+        SnackBarService.showNegativeSnackBar(
+            context: context, message: e.toString());
+      }
     }
-  }
-
-  void _uploadFormData(Map<String, dynamic> formData) {
-    // Upload form data to server
-    // Implement your server upload logic here
-    print(formData);
   }
 
   @override

@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
+import 'package:mime/mime.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rosadmin/helpers/failure.dart';
 import 'package:rosadmin/helpers/types.dart';
 import 'package:rosadmin/providers/user.dart';
 import 'package:rosadmin/res/strings.dart';
 import 'package:rosadmin/utils/config.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart';
 
 part 'network.g.dart';
@@ -63,7 +66,10 @@ class NetworkRepo {
   }
 
   FutureEither<Response> postRequest(
-      {required String url, dynamic body, bool requireAuth = true}) async {
+      {required String url,
+      dynamic body,
+      bool multipart = false,
+      bool requireAuth = true}) async {
     if (requireAuth) {
       if (_authToken.isNone()) {
         return Left(Failure(message: FailureMessage.authTokenEmpty));
@@ -82,10 +88,30 @@ class NetworkRepo {
       log('BODY : $body', name: LogLabel.httpPost);
     }
     try {
-      final response = await post(Uri.parse(url),
-          body: jsonEncode(body), headers: requestHeaders);
-      log('RESPONSE : ${response.body}', name: LogLabel.httpPost);
-      return Right(response);
+      if (!multipart) {
+        final response = await post(Uri.parse(url),
+            body: jsonEncode(body), headers: requestHeaders);
+        log('RESPONSE : ${response.body}', name: LogLabel.httpPost);
+        return Right(response);
+      } else {
+        var request = MultipartRequest('POST', Uri.parse(url));
+        (body as Map<String, dynamic>).forEach((key, value) {
+          if (key != "file") {
+            request.fields[key] = value;
+          } else {
+            var fileData = File(value).readAsBytesSync();
+            var mime = lookupMimeType(value);
+            request.files.add(MultipartFile.fromBytes(value, fileData,
+                contentType: MediaType(mime!.substring(0, mime.indexOf("/")),
+                    mime.substring(mime.indexOf("/") + 1)),
+                filename: value.split("/").last));
+          }
+        });
+
+        final response = await Response.fromStream(await request.send());
+
+        return Right(response);
+      }
     } catch (e, stktrc) {
       return Left(Failure(
           message: FailureMessage.postRequestMessage, stackTrace: stktrc));
@@ -93,7 +119,10 @@ class NetworkRepo {
   }
 
   FutureEither<Response> putRequest(
-      {required String url, dynamic body, bool requireAuth = true}) async {
+      {required String url,
+      dynamic body,
+      bool multipart = false,
+      bool requireAuth = true}) async {
     if (requireAuth) {
       if (_authToken.isNone()) {
         return Left(Failure(message: FailureMessage.authTokenEmpty));
@@ -115,10 +144,30 @@ class NetworkRepo {
       log('BODY : $body', name: LogLabel.httpPut);
     }
     try {
-      final response = await put(Uri.parse(url),
-          body: jsonEncode(body), headers: requestHeaders);
-      log('RESPONSE : ${response.body}', name: LogLabel.httpPut);
-      return Right(response);
+      if (!multipart) {
+        final response = await put(Uri.parse(url),
+            body: jsonEncode(body), headers: requestHeaders);
+        log('RESPONSE : ${response.body}', name: LogLabel.httpPut);
+        return Right(response);
+      } else {
+        var request = MultipartRequest('PUT', Uri.parse(url));
+        (body as Map<String, dynamic>).forEach((key, value) {
+          if (key != "file") {
+            request.fields[key] = value;
+          } else {
+            var fileData = File(value).readAsBytesSync();
+            var mime = lookupMimeType(value);
+            request.files.add(MultipartFile.fromBytes(value, fileData,
+                contentType: MediaType(mime!.substring(0, mime.indexOf("/")),
+                    mime.substring(mime.indexOf("/") + 1)),
+                filename: value.split("/").last));
+          }
+        });
+
+        final response = await Response.fromStream(await request.send());
+
+        return Right(response);
+      }
     } catch (e, stktrc) {
       return Left(Failure(
           message: FailureMessage.putRequestMessage, stackTrace: stktrc));

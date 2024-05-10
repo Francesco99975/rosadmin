@@ -32,7 +32,9 @@ class Products extends _$Products {
 
     return network.match((l) => Left(l), (network) async {
       final response = await network.postRequest(
-          url: Endpoints.productsEndpoint, body: product.toMap());
+          url: Endpoints.productsEndpoint,
+          body: product.toMap(),
+          multipart: true);
 
       return response.match((l) => Left(l), (r) {
         final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
@@ -48,7 +50,9 @@ class Products extends _$Products {
 
     return network.match((l) => Left(l), (network) async {
       final response = await network.putRequest(
-          url: Endpoints.productsEndpoint, body: product.toMap());
+          url: Endpoints.productsEndpoint,
+          body: product.toMap(),
+          multipart: true);
 
       return response.match((l) => Left(l), (r) {
         final data = jsonDecode(r.body) as List<Map<String, dynamic>>;

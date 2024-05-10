@@ -36,11 +36,8 @@ class Purchase {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
-      'product': product.toMap(),
+      'product_id': product.id,
       'quantity': quantity,
-      'created': created.toIso8601String(),
-      'updated': updated.toIso8601String()
     };
   }
 
