@@ -22,7 +22,7 @@ class Customers extends _$Customers {
       );
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        final List<dynamic> data = jsonDecode(r.body);
         return Right((data.map((e) => Customer.fromMap(e)).toList()));
       });
     });
@@ -37,7 +37,7 @@ class Customers extends _$Customers {
           url: "${Endpoints.customersEndpoint}/${customer.id}");
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        final List<dynamic> data = jsonDecode(r.body);
         final updatedState = (data.map((e) => Customer.fromMap(e)).toList());
         state = AsyncValue.data(Right(updatedState));
         return Right(customer);

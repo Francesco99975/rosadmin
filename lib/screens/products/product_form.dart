@@ -2,14 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rosadmin/models/category.dart';
 import 'package:rosadmin/models/product.dart';
+import 'package:rosadmin/providers/categories.dart';
 import 'package:rosadmin/providers/products.dart';
 import 'package:rosadmin/utils/snackbar_service.dart';
+import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 
 class ProductFormScreen extends ConsumerStatefulWidget {
-  final bool isNewProduct;
+  static const routePath = "/product/new";
+
   final String? pid;
   final String? name;
   final String? description;
@@ -20,7 +24,6 @@ class ProductFormScreen extends ConsumerStatefulWidget {
 
   const ProductFormScreen({
     super.key,
-    required this.isNewProduct,
     this.pid,
     this.name,
     this.description,
@@ -40,7 +43,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
   late TextEditingController _priceController;
-  late TextEditingController _categoryController;
+  late String _selectedCategory;
   late bool _weighed;
   File? _image;
 
@@ -53,8 +56,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
         TextEditingController(text: widget.description ?? "");
     _priceController =
         TextEditingController(text: widget.price?.toString() ?? "");
-    _categoryController = TextEditingController(
-        text: widget.category ?? ""); //Fix This shoould be dropdown
+    _selectedCategory = widget.category ?? "";
     _weighed = widget.weighed ?? false;
   }
 
@@ -66,11 +68,9 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: context.pop,
         ),
-        title: Text(widget.isNewProduct ? 'New Product' : 'Edit Product'),
+        title: Text(_id.isEmpty ? 'New Product' : 'Edit Product'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -97,11 +97,29 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  controller: _categoryController,
-                  decoration: const InputDecoration(
-                      labelText: 'Category'), //Fix This shoould be dropdown
-                ),
+                AsyncProviderWrapper(
+                    state: ref.watch(categoriesProvider),
+                    onRetry: () => ref.refresh(categoriesProvider.future),
+                    render: (categories) {
+                      return DropdownButton<String>(
+                          value: _selectedCategory.isEmpty
+                              ? null
+                              : _selectedCategory,
+                          hint: const Text("Select a Category"),
+                          items: categories
+                              .map((e) => DropdownMenuItem<String>(
+                                    value: e.id,
+                                    child: Text(e.name),
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() {
+                                _selectedCategory = value;
+                              });
+                            }
+                          });
+                    }),
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -122,9 +140,8 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _submitForm,
-                  child: Text(widget.isNewProduct
-                      ? 'Create Product'
-                      : 'Update Product'),
+                  child:
+                      Text(_id.isEmpty ? 'Create Product' : 'Update Product'),
                 ),
               ],
             ),
@@ -185,13 +202,12 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
             featured: false,
             published: true,
             category: Category(
-                id: _categoryController.text,
-                name: ""), //Fix This shoould be dropdown
+                id: _selectedCategory, name: ""), //Fix This shoould be dropdown
             weighed: _weighed,
             created: DateTime.now(),
             updated: DateTime.now());
 
-        final response = widget.isNewProduct
+        final response = _id.isEmpty
             ? await ref.read(productsProvider.notifier).add(product)
             : await ref.read(productsProvider.notifier).updateProduct(product);
 
@@ -215,7 +231,6 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
     _nameController.dispose();
     _descriptionController.dispose();
     _priceController.dispose();
-    _categoryController.dispose();
     super.dispose();
   }
 }

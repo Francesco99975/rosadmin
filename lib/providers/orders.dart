@@ -37,7 +37,7 @@ class Orders extends _$Orders {
           url: Endpoints.ordersEndpoint, body: order.toMap());
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        final List<dynamic> data = jsonDecode(r.body);
         final updatedState = (data.map((e) => model.Order.fromMap(e)).toList());
         state = AsyncValue.data(Right(updatedState));
         return Right(updatedState.last);
@@ -54,7 +54,7 @@ class Orders extends _$Orders {
           url: Endpoints.ordersEndpoint, body: order.toMap());
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        final List<dynamic> data = jsonDecode(r.body);
         final updatedState = (data.map((e) => model.Order.fromMap(e)).toList());
         state = AsyncValue.data(Right(updatedState));
         return Right(updatedState.last);
@@ -71,7 +71,7 @@ class Orders extends _$Orders {
           url: "${Endpoints.ordersEndpoint}/${order.id}");
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        final List<dynamic> data = jsonDecode(r.body);
         final updatedState = (data.map((e) => model.Order.fromMap(e)).toList());
         state = AsyncValue.data(Right(updatedState));
         return Right(order);

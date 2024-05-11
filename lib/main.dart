@@ -34,7 +34,7 @@ class Rosadmin extends ConsumerWidget {
 class SplashView extends ConsumerStatefulWidget {
   const SplashView({super.key});
 
-  static const routePath = "/splash";
+  static const routePath = "/";
 
   @override
   ConsumerState<SplashView> createState() => _SplashViewState();

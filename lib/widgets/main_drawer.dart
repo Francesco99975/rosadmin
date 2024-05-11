@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rosadmin/main.dart';
 import 'package:rosadmin/screens/categories.dart';
-import 'package:rosadmin/screens/dashboard/dashboard.dart';
+import 'package:rosadmin/screens/products/products.dart';
 
 class MainDrawer extends StatelessWidget {
   final String active;
@@ -25,12 +26,12 @@ class MainDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(
               Icons.dashboard_outlined,
-              color: active == DashboardScreen.routePath
+              color: active == SplashView.routePath
                   ? Theme.of(context).colorScheme.secondary
                   : Colors.white,
             ),
             title: const Text('Dashboard'),
-            onTap: () => context.go(DashboardScreen.routePath),
+            onTap: () => context.go(SplashView.routePath),
           ),
           ListTile(
             title: const Text('Orders'),
@@ -39,20 +40,24 @@ class MainDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('Products'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
             leading: Icon(
               Icons.category_outlined,
-              color: active == DashboardScreen.routePath
+              color: active == CategoryScreen.routePath
                   ? Theme.of(context).colorScheme.secondary
                   : Colors.white,
             ),
             title: const Text('Categories'),
             onTap: () => context.go(CategoryScreen.routePath),
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.store,
+              color: active == ProductScreen.routePath
+                  ? Theme.of(context).colorScheme.secondary
+                  : Colors.white,
+            ),
+            title: const Text("Products"),
+            onTap: () => context.go(ProductScreen.routePath),
           ),
           ListTile(
             title: const Text('Customers'),

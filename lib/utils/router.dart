@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rosadmin/main.dart';
-import 'package:rosadmin/screens/auth.dart';
 import 'package:rosadmin/screens/categories.dart';
-import 'package:rosadmin/screens/dashboard/dashboard.dart';
+import 'package:rosadmin/screens/products/product_form.dart';
+import 'package:rosadmin/screens/products/products.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: SplashView.routePath,
@@ -14,22 +14,33 @@ final GoRouter router = GoRouter(
         return const SplashView();
       },
     ),
-    GoRoute(
-      path: DashboardScreen.routePath,
-      builder: (BuildContext context, GoRouterState state) {
-        return const DashboardScreen();
-      },
-    ),
-    GoRoute(
-      path: AuthScreen.routePath,
-      builder: (BuildContext context, GoRouterState state) {
-        return const AuthScreen();
-      },
-    ),
+    // GoRoute(
+    //   path: DashboardScreen.routePath,
+    //   builder: (BuildContext context, GoRouterState state) {
+    //     return const DashboardScreen();
+    //   },
+    // ),
+    // GoRoute(
+    //   path: AuthScreen.routePath,
+    //   builder: (BuildContext context, GoRouterState state) {
+    //     return const AuthScreen();
+    //   },
+    // ),
     GoRoute(
         path: CategoryScreen.routePath,
         builder: (BuildContext context, GoRouterState state) {
           return const CategoryScreen();
         }),
+    GoRoute(
+        path: ProductScreen.routePath,
+        builder: (BuildContext context, GoRouterState state) {
+          return const ProductScreen();
+        }),
+    GoRoute(
+      path: ProductFormScreen.routePath,
+      builder: (BuildContext context, GoRouterState state) {
+        return const ProductFormScreen();
+      },
+    )
   ],
 );

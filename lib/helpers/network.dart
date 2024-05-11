@@ -61,7 +61,8 @@ class NetworkRepo {
       return Right(response);
     } catch (e, stktrc) {
       return Left(Failure(
-          message: FailureMessage.getRequestMessage, stackTrace: stktrc));
+          message: "${FailureMessage.getRequestMessage}: ${e.toString()}",
+          stackTrace: stktrc));
     }
   }
 
@@ -97,7 +98,7 @@ class NetworkRepo {
         var request = MultipartRequest('POST', Uri.parse(url));
         (body as Map<String, dynamic>).forEach((key, value) {
           if (key != "file") {
-            request.fields[key] = value;
+            request.fields[key] = value; //Does't like this
           } else {
             var fileData = File(value).readAsBytesSync();
             var mime = lookupMimeType(value);
@@ -114,7 +115,8 @@ class NetworkRepo {
       }
     } catch (e, stktrc) {
       return Left(Failure(
-          message: FailureMessage.postRequestMessage, stackTrace: stktrc));
+          message: "${FailureMessage.postRequestMessage}: ${e.toString()}",
+          stackTrace: stktrc));
     }
   }
 
@@ -153,7 +155,7 @@ class NetworkRepo {
         var request = MultipartRequest('PUT', Uri.parse(url));
         (body as Map<String, dynamic>).forEach((key, value) {
           if (key != "file") {
-            request.fields[key] = value;
+            request.fields[key] = value.toString();
           } else {
             var fileData = File(value).readAsBytesSync();
             var mime = lookupMimeType(value);
@@ -170,7 +172,8 @@ class NetworkRepo {
       }
     } catch (e, stktrc) {
       return Left(Failure(
-          message: FailureMessage.putRequestMessage, stackTrace: stktrc));
+          message: "${FailureMessage.putRequestMessage}: ${e.toString()}",
+          stackTrace: stktrc));
     }
   }
 
@@ -200,7 +203,8 @@ class NetworkRepo {
       return Right(response);
     } catch (e, stktrc) {
       return Left(Failure(
-          message: FailureMessage.deleteRequestMessage, stackTrace: stktrc));
+          message: "${FailureMessage.deleteRequestMessage}: ${e.toString()}",
+          stackTrace: stktrc));
     }
   }
 }

@@ -21,7 +21,7 @@ class Products extends _$Products {
       );
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        final List<dynamic> data = jsonDecode(r.body);
         return Right((data.map((e) => Product.fromMap(e)).toList()));
       });
     });
@@ -37,7 +37,7 @@ class Products extends _$Products {
           multipart: true);
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        final List<dynamic> data = jsonDecode(r.body);
         final updatedState = (data.map((e) => Product.fromMap(e)).toList());
         state = AsyncValue.data(Right(updatedState));
         return Right(updatedState.last);
@@ -55,7 +55,7 @@ class Products extends _$Products {
           multipart: true);
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        final List<dynamic> data = jsonDecode(r.body);
         final updatedState = (data.map((e) => Product.fromMap(e)).toList());
         state = AsyncValue.data(Right(updatedState));
         return Right(updatedState.last);
@@ -71,7 +71,7 @@ class Products extends _$Products {
           url: "${Endpoints.productsEndpoint}/${product.id}");
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        final List<dynamic> data = jsonDecode(r.body);
         final updatedState = (data.map((e) => Product.fromMap(e)).toList());
         state = AsyncValue.data(Right(updatedState));
         return Right(product);

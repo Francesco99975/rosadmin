@@ -11,8 +11,8 @@ class ProductItem extends StatelessWidget {
   final double price;
   final bool isPublished;
   final bool isFeatured;
-  final Function(bool) onPublishedChange;
-  final Function(bool) onFeaturedChange;
+  final Future<Either<Failure, Product>> Function(bool) onPublishedChange;
+  final Future<Either<Failure, Product>> Function(bool) onFeaturedChange;
   final Future<Either<Failure, Product>> Function() onDelete;
 
   const ProductItem(
@@ -78,8 +78,16 @@ class ProductItem extends StatelessWidget {
                       const Text('Published'),
                       Switch.adaptive(
                         value: isPublished,
-                        onChanged: (value) {
-                          onPublishedChange(value);
+                        onChanged: (value) async {
+                          final response = await onPublishedChange(value);
+
+                          response.match(
+                              (l) => SnackBarService.showNegativeSnackBar(
+                                  context: context, message: l.message),
+                              (r) => SnackBarService.showPositiveSnackBar(
+                                  context: context,
+                                  message:
+                                      "Updated status of publication for ${r.name}"));
                         },
                       ),
                     ],
@@ -90,14 +98,35 @@ class ProductItem extends StatelessWidget {
                       const Text('Featured'),
                       Switch.adaptive(
                         value: isFeatured,
-                        onChanged: (value) {
-                          onFeaturedChange(value);
+                        onChanged: (value) async {
+                          final response = await onFeaturedChange(value);
+
+                          response.match(
+                              (l) => SnackBarService.showNegativeSnackBar(
+                                  context: context, message: l.message),
+                              (r) => SnackBarService.showPositiveSnackBar(
+                                  context: context,
+                                  message:
+                                      "Updated status of status for ${r.name}"));
                         },
                       ),
                     ],
                   ),
                 ],
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      backgroundColor: Theme.of(context).colorScheme.surface),
+                  onPressed: () => context.go(""),
+                  child: Text('EDIT',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface))),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
