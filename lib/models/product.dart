@@ -81,7 +81,7 @@ class Product {
       published: map['published'],
       category: Category.fromMap(map['category']),
       weighed: map['weighed'],
-      created: DateTime.parse(map['creted']),
+      created: DateTime.parse(map['created']),
       updated: DateTime.parse(map['updated']),
     );
   }

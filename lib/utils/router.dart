@@ -38,6 +38,7 @@ final GoRouter router = GoRouter(
         }),
     GoRoute(
       path: ProductFormScreen.routePath,
+      name: "new",
       builder: (BuildContext context, GoRouterState state) {
         return const ProductFormScreen();
       },

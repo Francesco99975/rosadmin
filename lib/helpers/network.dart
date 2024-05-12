@@ -58,6 +58,12 @@ class NetworkRepo {
     try {
       final response = await get(Uri.parse(url), headers: requestHeaders);
       log('RESPONSE : ${response.body}', name: LogLabel.httpGet);
+
+      if (response.statusCode >= 400) {
+        final error = jsonDecode(String.fromCharCodes(response.bodyBytes));
+        return Left(Failure(message: error["message"]));
+      }
+
       return Right(response);
     } catch (e, stktrc) {
       return Left(Failure(
@@ -93,23 +99,37 @@ class NetworkRepo {
         final response = await post(Uri.parse(url),
             body: jsonEncode(body), headers: requestHeaders);
         log('RESPONSE : ${response.body}', name: LogLabel.httpPost);
+
+        if (response.statusCode >= 400) {
+          final error = jsonDecode(String.fromCharCodes(response.bodyBytes));
+          return Left(Failure(message: error["message"]));
+        }
+
         return Right(response);
       } else {
         var request = MultipartRequest('POST', Uri.parse(url));
         (body as Map<String, dynamic>).forEach((key, value) {
           if (key != "file") {
-            request.fields[key] = value; //Does't like this
+            request.fields[key] = "$value"; //Does't like this
           } else {
             var fileData = File(value).readAsBytesSync();
             var mime = lookupMimeType(value);
-            request.files.add(MultipartFile.fromBytes(value, fileData,
+            request.files.add(MultipartFile.fromBytes("image", fileData,
                 contentType: MediaType(mime!.substring(0, mime.indexOf("/")),
                     mime.substring(mime.indexOf("/") + 1)),
                 filename: value.split("/").last));
           }
         });
 
+        request.headers["Cookie"] = "token=$tkn";
+
         final response = await Response.fromStream(await request.send());
+
+        if (response.statusCode >= 400) {
+          final error = jsonDecode(String.fromCharCodes(response.bodyBytes));
+
+          return Left(Failure(message: error["message"]));
+        }
 
         return Right(response);
       }
@@ -150,6 +170,12 @@ class NetworkRepo {
         final response = await put(Uri.parse(url),
             body: jsonEncode(body), headers: requestHeaders);
         log('RESPONSE : ${response.body}', name: LogLabel.httpPut);
+
+        if (response.statusCode >= 400) {
+          final error = jsonDecode(String.fromCharCodes(response.bodyBytes));
+          return Left(Failure(message: error["message"]));
+        }
+
         return Right(response);
       } else {
         var request = MultipartRequest('PUT', Uri.parse(url));
@@ -159,7 +185,7 @@ class NetworkRepo {
           } else {
             var fileData = File(value).readAsBytesSync();
             var mime = lookupMimeType(value);
-            request.files.add(MultipartFile.fromBytes(value, fileData,
+            request.files.add(MultipartFile.fromBytes("image", fileData,
                 contentType: MediaType(mime!.substring(0, mime.indexOf("/")),
                     mime.substring(mime.indexOf("/") + 1)),
                 filename: value.split("/").last));
@@ -167,6 +193,11 @@ class NetworkRepo {
         });
 
         final response = await Response.fromStream(await request.send());
+
+        if (response.statusCode >= 400) {
+          final error = jsonDecode(String.fromCharCodes(response.bodyBytes));
+          return Left(Failure(message: error["message"]));
+        }
 
         return Right(response);
       }
@@ -200,6 +231,12 @@ class NetworkRepo {
       final response = await delete(Uri.parse(url),
           body: jsonEncode(body), headers: requestHeaders);
       log('RESPONSE : ${response.body}', name: LogLabel.httpDelete);
+
+      if (response.statusCode >= 400) {
+        final error = jsonDecode(String.fromCharCodes(response.bodyBytes));
+        return Left(Failure(message: error["message"]));
+      }
+
       return Right(response);
     } catch (e, stktrc) {
       return Left(Failure(

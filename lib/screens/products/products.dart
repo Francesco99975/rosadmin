@@ -40,11 +40,7 @@ class ProductScreen extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final product = products[index];
                       return ProductItem(
-                          productName: product.name,
-                          category: product.category.id,
-                          price: product.price / 100,
-                          isPublished: product.published,
-                          isFeatured: product.featured,
+                          product: product,
                           onPublishedChange: (value) => ref
                               .read(productsProvider.notifier)
                               .updateProduct(

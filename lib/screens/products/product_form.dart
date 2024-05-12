@@ -155,19 +155,26 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _image != null
-            ? Image.file(
-                _image!,
+        _id.isNotEmpty && _image == null
+            ? Image.network(
+                widget.imageUrl!,
                 height: 150,
                 width: 150,
                 fit: BoxFit.cover,
               )
-            : Container(
-                height: 150,
-                width: 150,
-                color: Colors.grey[200],
-                child: const Icon(Icons.image),
-              ),
+            : (_image != null
+                ? Image.file(
+                    _image!,
+                    height: 150,
+                    width: 150,
+                    fit: BoxFit.cover,
+                  )
+                : Container(
+                    height: 150,
+                    width: 150,
+                    color: Colors.grey[200],
+                    child: const Icon(Icons.image),
+                  )),
         const SizedBox(height: 8),
         ElevatedButton(
           onPressed: _getImage,
