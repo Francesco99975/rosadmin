@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rosadmin/main.dart';
 import 'package:rosadmin/screens/categories.dart';
+import 'package:rosadmin/screens/products/product_detail.dart';
 import 'package:rosadmin/screens/products/product_form.dart';
 import 'package:rosadmin/screens/products/products.dart';
 
@@ -46,6 +47,20 @@ final GoRouter router = GoRouter(
           category: state.uri.queryParameters['category'],
           description: state.uri.queryParameters['description'],
           imageUrl: state.uri.queryParameters['imageUrl'],
+          price: double.parse(state.uri.queryParameters['price'] ?? "0.0"),
+          weighed: bool.parse(state.uri.queryParameters['weighed'] ?? "false"),
+        );
+      },
+    ),
+    GoRoute(
+      path: ProductDetailScreen.routePath,
+      name: "product_detail",
+      builder: (BuildContext context, GoRouterState state) {
+        return ProductDetailScreen(
+          name: state.uri.queryParameters['name'] ?? "",
+          category: state.uri.queryParameters['category'] ?? "",
+          description: state.uri.queryParameters['description'] ?? "",
+          imageUrl: state.uri.queryParameters['imageUrl'] ?? "",
           price: double.parse(state.uri.queryParameters['price'] ?? "0.0"),
           weighed: bool.parse(state.uri.queryParameters['weighed'] ?? "false"),
         );

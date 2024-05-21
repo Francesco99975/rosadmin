@@ -33,7 +33,16 @@ class ProductItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InkWell(
-              onTap: () => context.go("/"),
+              onTap: () =>
+                  context.pushNamed('product_detail', queryParameters: {
+                "pid": product.id,
+                "name": product.name,
+                "description": product.description,
+                "price": (product.price / 100).toString(),
+                "imageUrl": product.image,
+                "category": product.category.name,
+                "weighed": (product.weighed).toString()
+              }),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
