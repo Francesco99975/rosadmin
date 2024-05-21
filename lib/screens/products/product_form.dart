@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rosadmin/constants/endpoints.dart';
 import 'package:rosadmin/models/category.dart';
 import 'package:rosadmin/models/product.dart';
 import 'package:rosadmin/providers/categories.dart';
@@ -98,8 +100,8 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                 ),
                 const SizedBox(height: 16),
                 AsyncProviderWrapper(
-                    state: ref.watch(categoriesProvider),
-                    onRetry: () => ref.refresh(categoriesProvider.future),
+                    provider: categoriesProvider,
+                    future: categoriesProvider.future,
                     render: (categories) {
                       return DropdownButton<String>(
                           value: _selectedCategory.isEmpty
@@ -156,18 +158,19 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _id.isNotEmpty && _image == null
-            ? Image.network(
-                widget.imageUrl!,
+            ? CachedNetworkImage(
+                imageUrl: "${Endpoints.baseUrl}${widget.imageUrl!}",
+                fit: BoxFit.contain,
                 height: 150,
                 width: 150,
-                fit: BoxFit.cover,
+                cacheKey: widget.imageUrl! + DateTime.now().toIso8601String(),
               )
             : (_image != null
                 ? Image.file(
                     _image!,
                     height: 150,
                     width: 150,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                   )
                 : Container(
                     height: 150,
@@ -205,7 +208,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
             name: _nameController.text,
             description: _descriptionController.text,
             price: priceSpec,
-            image: _image!.path,
+            image: _image != null ? _image!.path : widget.imageUrl!,
             featured: false,
             published: true,
             category: Category(
@@ -223,12 +226,16 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                 context: context, message: l.message),
             (r) => SnackBarService.showPositiveSnackBar(
                 context: context,
-                message: "${r.name} added to products successfully"));
+                message:
+                    "${r.name} ${widget.pid == null ? 'added to products' : 'updated'} successfully"));
+      } else {
+        SnackBarService.showNegativeSnackBar(
+            context: context, message: "Invalid Data");
       }
     } catch (e) {
       if (mounted) {
         SnackBarService.showNegativeSnackBar(
-            context: context, message: e.toString());
+            context: context, message: "Something went wrong: ${e.toString()}");
       }
     }
   }

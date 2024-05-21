@@ -38,9 +38,17 @@ final GoRouter router = GoRouter(
         }),
     GoRoute(
       path: ProductFormScreen.routePath,
-      name: "new",
+      name: "form_product",
       builder: (BuildContext context, GoRouterState state) {
-        return const ProductFormScreen();
+        return ProductFormScreen(
+          pid: state.uri.queryParameters['pid'],
+          name: state.uri.queryParameters['name'],
+          category: state.uri.queryParameters['category'],
+          description: state.uri.queryParameters['description'],
+          imageUrl: state.uri.queryParameters['imageUrl'],
+          price: double.parse(state.uri.queryParameters['price'] ?? "0.0"),
+          weighed: bool.parse(state.uri.queryParameters['weighed'] ?? "false"),
+        );
       },
     )
   ],

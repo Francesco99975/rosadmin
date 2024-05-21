@@ -19,11 +19,9 @@ class ProductScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final products = ref.watch(productsProvider);
-
     return AsyncProviderWrapper<List<Product>>(
-        state: products,
-        onRetry: () => ref.refresh(productsProvider.future),
+        provider: productsProvider,
+        future: productsProvider.future,
         render: (products) {
           return Scaffold(
             appBar: AppBar(

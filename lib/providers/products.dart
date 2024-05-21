@@ -50,7 +50,7 @@ class Products extends _$Products {
 
     return network.match((l) => Left(l), (network) async {
       final response = await network.putRequest(
-          url: Endpoints.productsEndpoint,
+          url: "${Endpoints.productsEndpoint}/${product.id}",
           body: product.toMap(),
           multipart: true);
 

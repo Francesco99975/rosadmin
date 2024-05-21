@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:fpdart/fpdart.dart' as fp;
 import 'package:rosadmin/models/user.dart';
 import 'package:rosadmin/providers/theme_provider.dart';
 import 'package:rosadmin/providers/user.dart';
@@ -22,7 +22,7 @@ class Rosadmin extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = ref.read(themexProvider);
+    final theme = ref.watch(themexProvider);
     return MaterialApp.router(
       title: 'Rosadmin',
       theme: theme.current,
@@ -31,16 +31,16 @@ class Rosadmin extends ConsumerWidget {
   }
 }
 
-class SplashView extends ConsumerStatefulWidget {
+class SplashView extends StatefulWidget {
   const SplashView({super.key});
 
   static const routePath = "/";
 
   @override
-  ConsumerState<SplashView> createState() => _SplashViewState();
+  State<SplashView> createState() => _SplashViewState();
 }
 
-class _SplashViewState extends ConsumerState<SplashView> {
+class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
@@ -48,15 +48,11 @@ class _SplashViewState extends ConsumerState<SplashView> {
 
   @override
   Widget build(BuildContext context) {
-    final userx = ref.watch(userxProvider);
-
-    return AsyncProviderWrapper<Option<User>>(
-      state: userx,
-      onRetry: () => ref.refresh(userxProvider.future),
-      render: (ouser) {
-        return ouser.match(
-            () => const AuthScreen(), (_) => const DashboardScreen());
-      },
+    return AsyncProviderWrapper<User>(
+      provider: userxProvider,
+      future: userxProvider.future,
+      errorOverride: const fp.Option.of(AuthScreen()),
+      render: (user) => const DashboardScreen(),
     );
   }
 }

@@ -51,17 +51,15 @@ class _FinancesStatsState extends ConsumerState<FinancesStats> {
 
   @override
   Widget build(BuildContext context) {
-    final financials = ref
-        .watch(finsProvider(selectedTimeframe, selectedMethod, selectedStatus));
     final moneyFormatter =
         NumberFormat.simpleCurrency(locale: 'en_CA', name: 'CAD');
     final dateFormatter = DateFormat.yMMMd();
 
     return AsyncProviderWrapper<Finances>(
-        state: financials,
-        onRetry: () => ref.refresh(
-            finsProvider(selectedTimeframe, selectedMethod, selectedStatus)
-                .future),
+        provider:
+            finsProvider(selectedTimeframe, selectedMethod, selectedStatus),
+        future: finsProvider(selectedTimeframe, selectedMethod, selectedStatus)
+            .future,
         render: (r) {
           return SingleChildScrollView(
             child: Padding(

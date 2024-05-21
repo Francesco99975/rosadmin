@@ -6,6 +6,7 @@ import 'package:rosadmin/helpers/types.dart';
 import 'package:rosadmin/models/user.dart';
 import 'package:rosadmin/providers/auth.dart';
 import 'package:rosadmin/providers/user.dart';
+import 'package:rosadmin/utils/snackbar_service.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -90,7 +91,14 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   ),
                   const SizedBox(height: 16.0),
                   ElevatedButton(
-                    onPressed: () async => await _login(),
+                    onPressed: () async {
+                      final response = await _login();
+
+                      response.match(
+                          (l) => SnackBarService.showNegativeSnackBar(
+                              context: context, message: l.message),
+                          (r) {});
+                    },
                     child: const Text('Login'),
                   ),
                 ],

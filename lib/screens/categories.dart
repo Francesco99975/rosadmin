@@ -104,11 +104,9 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final categories = ref.watch(categoriesProvider);
-
     return AsyncProviderWrapper<List<Category>>(
-        state: categories,
-        onRetry: () => ref.refresh(categoriesProvider.future),
+        provider: categoriesProvider,
+        future: categoriesProvider.future,
         render: (categoryList) {
           return Scaffold(
             appBar: AppBar(

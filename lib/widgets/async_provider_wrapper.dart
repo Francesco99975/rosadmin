@@ -5,29 +5,38 @@ import 'package:rosadmin/helpers/failure.dart';
 import 'package:rosadmin/screens/error.dart';
 import 'package:rosadmin/screens/loading.dart';
 
-class AsyncProviderWrapper<T> extends StatelessWidget {
-  final AsyncValue<Either<Failure, T>> state;
-  final Function onRetry;
+class AsyncProviderWrapper<T> extends ConsumerWidget {
+  final ProviderListenable<AsyncValue<Either<Failure, T>>> provider;
+  final Refreshable<Future<Either<Failure, T>>> future;
   final Widget Function(T) render;
+  final Option<Widget> errorOverride;
 
   const AsyncProviderWrapper(
       {super.key,
-      required this.state,
-      required this.onRetry,
-      required this.render});
+      required this.provider,
+      required this.future,
+      required this.render,
+      this.errorOverride = const Option.none()});
 
   @override
-  Widget build(BuildContext context) {
-    return switch (state) {
-      AsyncData(:final value) => value.match(
-          (l) => ErrorScreen(
-              errorMessage: "server error: ${l.message}", onRetry: onRetry),
-          render),
-      AsyncError(:final error) => ErrorScreen(
-          errorMessage: "runtime error: $error",
-          onRetry: onRetry,
-        ),
-      _ => const LoadingScreen()
-    };
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(provider);
+
+    return state.when(
+        data: (value) => value.match(
+            (l) => errorOverride.match(
+                () => ErrorScreen(
+                      errorMessage: "server error: ${l.message}",
+                      onRetry: () => ref.refresh(future),
+                    ),
+                (override) => override),
+            render),
+        error: (error, _) => errorOverride.match(
+            () => ErrorScreen(
+                  errorMessage: "runtime error: $error",
+                  onRetry: () => ref.refresh(future),
+                ),
+            (override) => override),
+        loading: () => const LoadingScreen());
   }
 }

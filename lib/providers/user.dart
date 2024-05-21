@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,7 +15,7 @@ part 'user.g.dart';
 @Riverpod(keepAlive: true)
 class Userx extends _$Userx {
   @override
-  Future<Either<Failure, Option<User>>> build() async {
+  Future<Either<Failure, User>> build() async {
     final storage = ref.read(storageProvider);
     final userJson = await storage.read(key: "USER");
     final socket = ref.read(socketProvider);
@@ -32,9 +33,10 @@ class Userx extends _$Userx {
 
         if (response.statusCode >= 400) {
           final error = jsonDecode(response.body);
-          return Left(Failure(
-              message: "HTTP error: ${error["message"]}",
-              stackTrace: error["errors"]));
+          if (kDebugMode) {
+            print("HTTP error: ${error["message"]}");
+          }
+          return Left(Failure(message: "Session Expired"));
         }
 
         final check = jsonDecode(response.body);
@@ -45,12 +47,12 @@ class Userx extends _$Userx {
 
         socket.authenticate(check["otp"]);
 
-        return Right(Option<User>.of(user));
+        return Right(user);
       } catch (e, stktrc) {
         return Left(Failure(message: e.toString(), stackTrace: stktrc));
       }
     } else {
-      return const Right(Option<User>.none());
+      return Left(Failure(message: "User not found"));
     }
   }
 
@@ -61,7 +63,7 @@ class Userx extends _$Userx {
     final socket = ref.read(socketProvider);
     socket.authenticate(otp);
 
-    state = AsyncData(Right(Option<User>.of(user)));
+    state = AsyncValue.data(Right(user));
   }
 
   Future<void> logout() async {
@@ -69,6 +71,6 @@ class Userx extends _$Userx {
     socket.close();
     final storage = ref.read(storageProvider);
     await storage.delete(key: "USER");
-    state = const AsyncData(Right(Option<User>.none()));
+    state = AsyncValue.data(Left(Failure(message: "logged out...")));
   }
 }

@@ -6,12 +6,12 @@ part of 'user.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userxHash() => r'5c872f71b0cd8073115c49e3b59e96e01ae83ad5';
+String _$userxHash() => r'402233b8d7032b04d3b04caa113ab195a0f0c79f';
 
 /// See also [Userx].
 @ProviderFor(Userx)
 final userxProvider =
-    AsyncNotifierProvider<Userx, Either<Failure, Option<User>>>.internal(
+    AsyncNotifierProvider<Userx, Either<Failure, User>>.internal(
   Userx.new,
   name: r'userxProvider',
   debugGetCreateSourceHash:
@@ -20,6 +20,6 @@ final userxProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$Userx = AsyncNotifier<Either<Failure, Option<User>>>;
+typedef _$Userx = AsyncNotifier<Either<Failure, User>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

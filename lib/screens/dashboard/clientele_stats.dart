@@ -45,13 +45,12 @@ class _ClienteleStatsState extends ConsumerState<ClienteleStats> {
 
   @override
   Widget build(BuildContext context) {
-    final clientele = ref.watch(clintlProvider(selectedTimeframe));
     final moneyFormatter =
         NumberFormat.simpleCurrency(locale: 'en_CA', name: 'CAD');
 
     return AsyncProviderWrapper<Clientele>(
-        state: clientele,
-        onRetry: () => ref.refresh(clintlProvider(selectedTimeframe).future),
+        provider: clintlProvider(selectedTimeframe),
+        future: clintlProvider(selectedTimeframe).future,
         render: (r) {
           return SingleChildScrollView(
             child: Padding(

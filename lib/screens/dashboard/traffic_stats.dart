@@ -47,13 +47,9 @@ class _TrafficStatsState extends ConsumerState<TrafficStats> {
 
   @override
   Widget build(BuildContext context) {
-    final visits =
-        ref.watch(visitsProvider(selectedQuality, selectedTimeframe));
-
     return AsyncProviderWrapper<Visit>(
-        state: visits,
-        onRetry: () => ref
-            .refresh(visitsProvider(selectedQuality, selectedTimeframe).future),
+        provider: visitsProvider(selectedQuality, selectedTimeframe),
+        future: visitsProvider(selectedQuality, selectedTimeframe).future,
         render: (r) {
           return SingleChildScrollView(
             child: Padding(

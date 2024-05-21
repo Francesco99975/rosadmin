@@ -21,16 +21,13 @@ class Network extends _$Network {
   Either<Failure, NetworkRepo> build() {
     final user = ref.watch(userxProvider);
 
-    return switch (user) {
-      AsyncData(:final value) =>
-        value.match((l) => Left(Failure(message: l.message)), (r) {
-          return r.match(
-              () => Right(NetworkRepo(authToken: const Option<String>.none())),
-              (t) => Right(NetworkRepo(authToken: Option<String>.of(t.token))));
-        }),
-      AsyncError(:final error) => Left(Failure(message: error.toString())),
-      _ => Left(Failure(message: "Network responding unexpectedly"))
-    };
+    return user.when(
+        data: (value) => Right(value.match(
+            (_) => NetworkRepo(authToken: const Option<String>.none()),
+            (user) => NetworkRepo(authToken: Option<String>.of(user.token)))),
+        error: (error, stktrc) =>
+            Left(Failure(message: error.toString(), stackTrace: stktrc)),
+        loading: () => Left(Failure(message: "loading...")));
   }
 }
 
@@ -180,7 +177,7 @@ class NetworkRepo {
       } else {
         var request = MultipartRequest('PUT', Uri.parse(url));
         (body as Map<String, dynamic>).forEach((key, value) {
-          if (key != "file") {
+          if (key != "file" || value.contains("/static/")) {
             request.fields[key] = value.toString();
           } else {
             var fileData = File(value).readAsBytesSync();
@@ -191,6 +188,8 @@ class NetworkRepo {
                 filename: value.split("/").last));
           }
         });
+
+        request.headers["Cookie"] = "token=$tkn";
 
         final response = await Response.fromStream(await request.send());
 

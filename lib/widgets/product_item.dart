@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:rosadmin/helpers/failure.dart';
 import 'package:rosadmin/models/product.dart';
-import 'package:rosadmin/screens/products/product_form.dart';
 import 'package:rosadmin/utils/capitalizer.dart';
 import 'package:rosadmin/utils/snackbar_service.dart';
 
@@ -81,8 +80,8 @@ class ProductItem extends StatelessWidget {
                               ),
                               backgroundColor:
                                   Theme.of(context).colorScheme.onPrimary),
-                          onPressed: () =>
-                              context.pushNamed("new", queryParameters: {
+                          onPressed: () => context
+                                  .pushNamed("form_product", queryParameters: {
                                 "pid": product.id,
                                 "name": product.name,
                                 "description": product.description,
