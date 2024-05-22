@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rosadmin/main.dart';
+import 'package:rosadmin/models/purchase.dart';
 import 'package:rosadmin/screens/categories.dart';
+import 'package:rosadmin/screens/costumers/costimer_detail.dart';
+import 'package:rosadmin/screens/costumers/customers.dart';
+import 'package:rosadmin/screens/orders/orders.dart';
+import 'package:rosadmin/screens/orders/orders_detail.dart';
 import 'package:rosadmin/screens/products/product_detail.dart';
 import 'package:rosadmin/screens/products/product_form.dart';
 import 'package:rosadmin/screens/products/products.dart';
@@ -65,6 +70,51 @@ final GoRouter router = GoRouter(
           weighed: bool.parse(state.uri.queryParameters['weighed'] ?? "false"),
         );
       },
-    )
+    ),
+    GoRoute(
+        path: CustomerScreen.routePath,
+        builder: (BuildContext context, GoRouterState state) {
+          return const CustomerScreen();
+        }),
+    GoRoute(
+      path: CustomerDetailsScreen.routePath,
+      name: "costumer_detail",
+      builder: (BuildContext context, GoRouterState state) {
+        return CustomerDetailsScreen(
+          fullName: state.uri.queryParameters['fullname'] ?? "",
+          email: state.uri.queryParameters['category'] ?? "",
+          address: state.uri.queryParameters['description'] ?? "",
+          phone: state.uri.queryParameters['imageUrl'] ?? "",
+          created: DateTime.parse(state.uri.queryParameters['created'] ?? "0"),
+          lastOrdered:
+              DateTime.parse(state.uri.queryParameters['last_ordered'] ?? "0"),
+          totalSpent:
+              double.parse(state.uri.queryParameters['total_spent'] ?? "0.0"),
+        );
+      },
+    ),
+    GoRoute(
+        path: OrderScreen.routePath,
+        builder: (BuildContext context, GoRouterState state) {
+          return const OrderScreen();
+        }),
+    GoRoute(
+      path: OrderDetailsScreen.routePath,
+      name: "order_detail",
+      builder: (BuildContext context, GoRouterState state) {
+        return OrderDetailsScreen(
+          customer: state.uri.queryParameters['fullname'] ?? "",
+          pickuptime:
+              DateTime.parse(state.uri.queryParameters['pickuptime'] ?? ""),
+          purchases: (state.uri.queryParameters['purchases'] as List<dynamic>)
+              .map((e) => Purchase.fromJson(e))
+              .toList(),
+          fulfilled:
+              bool.parse(state.uri.queryParameters['fulfilled'] ?? "false"),
+          method: state.uri.queryParameters['method'] ?? "",
+          total: double.parse(state.uri.queryParameters['total'] ?? "0.0"),
+        );
+      },
+    ),
   ],
 );

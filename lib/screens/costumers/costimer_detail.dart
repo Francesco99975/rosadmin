@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomerDetailsScreen extends StatelessWidget {
+  static const routePath = "/customers/detail";
+
   final String fullName;
   final String email;
   final String address;
   final String phone;
-  final DateTime dateCreated;
-  final DateTime lastOrderDate;
-  final int totalSpent;
+  final DateTime created;
+  final DateTime lastOrdered;
+  final double totalSpent;
 
   const CustomerDetailsScreen({
     super.key,
@@ -16,8 +18,8 @@ class CustomerDetailsScreen extends StatelessWidget {
     required this.email,
     required this.address,
     required this.phone,
-    required this.dateCreated,
-    required this.lastOrderDate,
+    required this.created,
+    required this.lastOrdered,
     required this.totalSpent,
   });
 
@@ -58,13 +60,13 @@ class CustomerDetailsScreen extends StatelessWidget {
                     'Date Created:',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(dateCreated.toString()),
+                  Text(created.toString()),
                   const SizedBox(height: 16),
                   const Text(
                     'Date of Last Order:',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(lastOrderDate.toString()),
+                  Text(lastOrdered.toString()),
                   const SizedBox(height: 16),
                   const Text(
                     'Total Spent:',

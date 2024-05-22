@@ -22,7 +22,7 @@ class Orders extends _$Orders {
       );
 
       return response.match((l) => Left(l), (r) {
-        final data = jsonDecode(r.body) as List<Map<String, dynamic>>;
+        final List<dynamic> data = jsonDecode(r.body);
         return Right((data.map((e) => model.Order.fromMap(e)).toList()));
       });
     });

@@ -62,8 +62,9 @@ class Order {
     return Order(
         id: map['id'],
         customer: Customer.fromMap(map['customer']),
-        purchases: List<Purchase>.from(
-            map['purchases']?.map((x) => Purchase.fromMap(x))),
+        purchases: (map['purchases'] as List<dynamic>)
+            .map((e) => Purchase.fromMap(e))
+            .toList(),
         pickuptime: DateTime.parse(map['pickuptime']),
         fulfilled: map['fulfilled'],
         method: map['method'],

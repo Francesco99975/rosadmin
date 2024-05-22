@@ -7,7 +7,8 @@ class Customer {
   final String address;
   final String phone;
   final DateTime created;
-  final DateTime updated;
+  final DateTime lastOrdered;
+  final int totalSpent;
 
   Customer(
       {required this.id,
@@ -16,7 +17,8 @@ class Customer {
       required this.address,
       required this.phone,
       required this.created,
-      required this.updated});
+      required this.lastOrdered,
+      required this.totalSpent});
 
   Customer copyWith(
       {String? id,
@@ -25,7 +27,8 @@ class Customer {
       String? address,
       String? phone,
       DateTime? created,
-      DateTime? updated}) {
+      DateTime? lastOrdered,
+      int? totalSpent}) {
     return Customer(
         id: id ?? this.id,
         fullname: fullname ?? this.fullname,
@@ -33,7 +36,8 @@ class Customer {
         address: address ?? this.address,
         phone: phone ?? this.phone,
         created: created ?? this.created,
-        updated: updated ?? this.updated);
+        lastOrdered: lastOrdered ?? this.lastOrdered,
+        totalSpent: totalSpent ?? this.totalSpent);
   }
 
   Map<String, dynamic> toMap() {
@@ -43,8 +47,6 @@ class Customer {
       'email': email,
       'address': address,
       'phone': phone,
-      'created': created.toIso8601String(),
-      'updated': updated.toIso8601String()
     };
   }
 
@@ -56,7 +58,8 @@ class Customer {
         address: map['address'],
         phone: map['phone'],
         created: DateTime.parse(map['created']),
-        updated: DateTime.parse(map['updated']));
+        lastOrdered: DateTime.parse(map['last_ordered']),
+        totalSpent: map['total_spent']);
   }
 
   String toJson() => jsonEncode(toMap());

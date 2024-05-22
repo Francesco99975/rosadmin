@@ -1,51 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:rosadmin/models/customer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomerItem extends StatelessWidget {
-  final String fullName;
-  final String email;
-  final String phoneNumber;
+  final Customer customer;
 
   const CustomerItem({
     super.key,
-    required this.fullName,
-    required this.email,
-    required this.phoneNumber,
+    required this.customer,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onLongPress: () {
-        // Go to customer detail
-      },
-      title: Text(
-        fullName,
-        style: const TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
+    return Card(
+      elevation: 3.0,
+      child: ListTile(
+        onLongPress: () =>
+            context.pushNamed('customer_detail', queryParameters: {
+          'id': customer.id,
+          'name': customer.fullname,
+          'email': customer.email,
+          'address': customer.address,
+          'phone': customer.phone,
+          'created': customer.created.toIso8601String(),
+          'last_ordered': customer.lastOrdered.toIso8601String(),
+          'total_spent': (customer.totalSpent / 100).toString(),
+        }),
+        title: Text(
+          customer.fullname,
+          style: const TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-      subtitle: Text(email),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.email),
-            onPressed: () async {
-              final url = Uri.parse('mailto:$email');
-              if (await canLaunchUrl(url)) {
-                await launchUrl(url);
-              }
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.phone),
-            onPressed: () {
-              _showConfirmationDialog(context, phoneNumber);
-            },
-          ),
-        ],
+        subtitle: Text(customer.email),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.email),
+              onPressed: () async {
+                final url = Uri.parse('mailto:${customer.email}');
+                if (await canLaunchUrl(url)) {
+                  await launchUrl(url);
+                }
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.phone),
+              onPressed: () {
+                _showConfirmationDialog(context, customer.phone);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

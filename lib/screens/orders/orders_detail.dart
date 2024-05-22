@@ -3,21 +3,23 @@ import 'package:rosadmin/models/purchase.dart';
 import 'package:rosadmin/widgets/purchase_item.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
-  final String customerFullName;
+  static const routePath = "/orders/detail";
+
+  final String customer;
   final List<Purchase> purchases;
-  final double totalCost;
-  final DateTime pickupDateTime;
-  final String paymentMethod;
-  final bool isFulfilled;
+  final double total;
+  final DateTime pickuptime;
+  final String method;
+  final bool fulfilled;
 
   const OrderDetailsScreen({
     super.key,
-    required this.customerFullName,
+    required this.customer,
     required this.purchases,
-    required this.totalCost,
-    required this.pickupDateTime,
-    required this.paymentMethod,
-    required this.isFulfilled,
+    required this.total,
+    required this.pickuptime,
+    required this.method,
+    required this.fulfilled,
   });
 
   @override
@@ -37,7 +39,7 @@ class OrderDetailsScreen extends StatelessWidget {
                 // Replace with actual navigation logic
               },
               child: Text(
-                'Customer: $customerFullName',
+                'Customer: $customer',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.underline,
@@ -54,16 +56,15 @@ class OrderDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Total Cost: \$${totalCost.toStringAsFixed(2)}',
+                      'Total Cost: \$${total.toStringAsFixed(2)}',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
-                    Text('Pickup Date & Time: $pickupDateTime'),
+                    Text('Pickup Date & Time: $pickuptime'),
                     const SizedBox(height: 8),
-                    Text('Payment Method: $paymentMethod'),
+                    Text('Payment Method: $method'),
                     const SizedBox(height: 8),
-                    Text(
-                        'Status: ${isFulfilled ? 'Fulfilled' : 'Unfulfilled'}'),
+                    Text('Status: ${fulfilled ? 'Fulfilled' : 'Unfulfilled'}'),
                   ],
                 ),
               ),
@@ -79,10 +80,11 @@ class OrderDetailsScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final purchase = purchases[index];
                   return PurchaseItem(
-                      quantity: purchase.quantity,
-                      productName: purchase.product.name,
-                      category: purchase.product.category.name,
-                      totalCost: totalCost);
+                    quantity: purchase.quantity,
+                    productName: purchase.product.name,
+                    category: purchase.product.category.name,
+                    totalCost: (purchase.cost / 100.0),
+                  );
                 },
               ),
             ),

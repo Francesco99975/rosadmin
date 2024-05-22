@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rosadmin/main.dart';
 import 'package:rosadmin/screens/categories.dart';
+import 'package:rosadmin/screens/costumers/customers.dart';
+import 'package:rosadmin/screens/orders/orders.dart';
 import 'package:rosadmin/screens/products/products.dart';
 
 class MainDrawer extends StatelessWidget {
@@ -34,10 +36,14 @@ class MainDrawer extends StatelessWidget {
             onTap: () => context.go(SplashView.routePath),
           ),
           ListTile(
+            leading: Icon(
+              Icons.shopping_bag_outlined,
+              color: active == OrderScreen.routePath
+                  ? Theme.of(context).colorScheme.secondary
+                  : Colors.white,
+            ),
             title: const Text('Orders'),
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () => context.go(OrderScreen.routePath),
           ),
           ListTile(
             leading: Icon(
@@ -60,10 +66,14 @@ class MainDrawer extends StatelessWidget {
             onTap: () => context.go(ProductScreen.routePath),
           ),
           ListTile(
+            leading: Icon(
+              Icons.people,
+              color: active == CustomerScreen.routePath
+                  ? Theme.of(context).colorScheme.secondary
+                  : Colors.white,
+            ),
             title: const Text('Customers'),
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () => context.go(CustomerScreen.routePath),
           ),
           ListTile(
             title: const Text('Settings'),
