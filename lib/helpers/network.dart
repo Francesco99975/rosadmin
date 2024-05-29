@@ -177,7 +177,7 @@ class NetworkRepo {
       } else {
         var request = MultipartRequest('PUT', Uri.parse(url));
         (body as Map<String, dynamic>).forEach((key, value) {
-          if (key != "file" || value.contains("/static/")) {
+          if (key != "file" || value.contains("/assets/")) {
             request.fields[key] = value.toString();
           } else {
             var fileData = File(value).readAsBytesSync();

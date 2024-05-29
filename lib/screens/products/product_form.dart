@@ -20,6 +20,8 @@ class ProductFormScreen extends ConsumerStatefulWidget {
   final String? name;
   final String? description;
   final double? price;
+  final bool? published;
+  final bool? featured;
   final String? imageUrl;
   final String? category;
   final bool? weighed;
@@ -30,6 +32,8 @@ class ProductFormScreen extends ConsumerStatefulWidget {
     this.name,
     this.description,
     this.price,
+    this.published,
+    this.featured,
     this.imageUrl,
     this.category,
     this.weighed,
@@ -209,8 +213,8 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
             description: _descriptionController.text,
             price: priceSpec,
             image: _image != null ? _image!.path : widget.imageUrl!,
-            featured: false,
-            published: true,
+            featured: widget.featured ?? false,
+            published: widget.published ?? false,
             category: Category(
                 id: _selectedCategory, name: ""), //Fix This shoould be dropdown
             weighed: _weighed,

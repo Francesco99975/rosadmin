@@ -53,6 +53,10 @@ final GoRouter router = GoRouter(
           description: state.uri.queryParameters['description'],
           imageUrl: state.uri.queryParameters['imageUrl'],
           price: double.parse(state.uri.queryParameters['price'] ?? "0.0"),
+          published:
+              bool.parse(state.uri.queryParameters['published'] ?? "false"),
+          featured:
+              bool.parse(state.uri.queryParameters['featured'] ?? "false"),
           weighed: bool.parse(state.uri.queryParameters['weighed'] ?? "false"),
         );
       },

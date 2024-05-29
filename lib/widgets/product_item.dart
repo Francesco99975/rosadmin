@@ -39,6 +39,8 @@ class ProductItem extends StatelessWidget {
                 "name": product.name,
                 "description": product.description,
                 "price": (product.price / 100).toString(),
+                "published": (product.published).toString(),
+                "featured": (product.featured).toString(),
                 "imageUrl": product.image,
                 "category": product.category.name,
                 "weighed": (product.weighed).toString()
@@ -211,8 +213,7 @@ class ProductItem extends StatelessWidget {
                                     context: context, message: l.message),
                                 (r) => SnackBarService.showPositiveSnackBar(
                                     context: context,
-                                    message:
-                                        "Updated status of status for ${r.name}"));
+                                    message: "Updated status for ${r.name}"));
                           },
                         ),
                       ],
