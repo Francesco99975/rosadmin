@@ -19,6 +19,8 @@ class Category {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'category': name,
+      'id': id,
+      'name': name,
     };
   }
 

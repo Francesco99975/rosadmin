@@ -70,8 +70,11 @@ class Product {
       'featured': featured,
       'published': published,
       'category_id': category.id,
+      'category': category.toMap(),
       'weighed': weighed,
       'lv': lv,
+      'created': created.toIso8601String(),
+      'updated': updated.toIso8601String(),
     };
   }
 
@@ -81,7 +84,7 @@ class Product {
       name: map['name'],
       description: map['description'],
       price: map['price'],
-      image: map['image'],
+      image: map['image'] ?? map['file'],
       featured: map['featured'],
       published: map['published'],
       category: Category.fromMap(map['category']),

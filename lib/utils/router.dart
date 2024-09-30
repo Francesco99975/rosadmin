@@ -112,10 +112,11 @@ final GoRouter router = GoRouter(
           customer: state.uri.queryParameters['fullname'] ?? "",
           pickuptime:
               DateTime.parse(state.uri.queryParameters['pickuptime'] ?? ""),
-          purchases: (jsonDecode(state.uri.queryParameters['purchases'] ?? "")
-                  as List<dynamic>)
-              .map((e) => Purchase.fromJson(e))
-              .toList(),
+          purchases:
+              ((jsonDecode(state.uri.queryParameters['purchases'] ?? "[]"))
+                      as List<dynamic>)
+                  .map((e) => Purchase.fromJson(e))
+                  .toList(),
           fulfilled:
               bool.parse(state.uri.queryParameters['fulfilled'] ?? "false"),
           method: state.uri.queryParameters['method'] ?? "",
