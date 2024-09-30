@@ -44,7 +44,7 @@ class Purchase {
   factory Purchase.fromMap(Map<String, dynamic> map) {
     return Purchase(
         id: map['id'],
-        product: Product.fromJson(map['product']),
+        product: Product.fromMap(map['product']),
         quantity: map['quantity'],
         created: DateTime.parse(map['created']),
         updated: DateTime.parse(map['updated']));

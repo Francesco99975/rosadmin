@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rosadmin/main.dart';
@@ -110,7 +112,8 @@ final GoRouter router = GoRouter(
           customer: state.uri.queryParameters['fullname'] ?? "",
           pickuptime:
               DateTime.parse(state.uri.queryParameters['pickuptime'] ?? ""),
-          purchases: (state.uri.queryParameters['purchases'] as List<dynamic>)
+          purchases: (jsonDecode(state.uri.queryParameters['purchases'] ?? "")
+                  as List<dynamic>)
               .map((e) => Purchase.fromJson(e))
               .toList(),
           fulfilled:

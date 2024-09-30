@@ -12,6 +12,7 @@ class Product {
   final bool published;
   final Category category;
   final bool weighed;
+  final int lv;
   final DateTime created;
   final DateTime updated;
 
@@ -25,6 +26,7 @@ class Product {
     required this.published,
     required this.category,
     required this.weighed,
+    required this.lv,
     required this.created,
     required this.updated,
   });
@@ -39,6 +41,7 @@ class Product {
     bool? published,
     Category? category,
     bool? weighed,
+    int? lv,
     DateTime? created,
     DateTime? updated,
   }) {
@@ -52,6 +55,7 @@ class Product {
         published: published ?? this.published,
         category: category ?? this.category,
         weighed: weighed ?? this.weighed,
+        lv: lv ?? this.lv,
         created: created ?? this.created,
         updated: updated ?? this.updated);
   }
@@ -67,6 +71,7 @@ class Product {
       'published': published,
       'category_id': category.id,
       'weighed': weighed,
+      'lv': lv,
     };
   }
 
@@ -81,6 +86,7 @@ class Product {
       published: map['published'],
       category: Category.fromMap(map['category']),
       weighed: map['weighed'],
+      lv: map['lv'],
       created: DateTime.parse(map['created']),
       updated: DateTime.parse(map['updated']),
     );

@@ -25,6 +25,7 @@ class ProductFormScreen extends ConsumerStatefulWidget {
   final String? imageUrl;
   final String? category;
   final bool? weighed;
+  final int? lv;
 
   const ProductFormScreen({
     super.key,
@@ -37,6 +38,7 @@ class ProductFormScreen extends ConsumerStatefulWidget {
     this.imageUrl,
     this.category,
     this.weighed,
+    this.lv,
   });
 
   @override
@@ -51,6 +53,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
   late TextEditingController _priceController;
   late String _selectedCategory;
   late bool _weighed;
+  late int _lv;
   File? _image;
 
   @override
@@ -64,6 +67,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
         TextEditingController(text: widget.price?.toString() ?? "");
     _selectedCategory = widget.category ?? "";
     _weighed = widget.weighed ?? false;
+    _lv = widget.lv ?? 1;
   }
 
   @override
@@ -101,6 +105,23 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                   controller: _priceController,
                   decoration: const InputDecoration(labelText: 'Price'),
                   keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Labor Value: $_lv',
+                  style: const TextStyle(fontSize: 24),
+                ),
+                Slider(
+                  value: _lv.toDouble(),
+                  min: 1,
+                  max: 10,
+                  divisions: 9, // Ensures whole number steps
+                  label: _lv.toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _lv = value.toInt();
+                    });
+                  },
                 ),
                 const SizedBox(height: 16),
                 AsyncProviderWrapper(
@@ -218,6 +239,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
             category: Category(
                 id: _selectedCategory, name: ""), //Fix This shoould be dropdown
             weighed: _weighed,
+            lv: _lv,
             created: DateTime.now(),
             updated: DateTime.now());
 
@@ -227,11 +249,14 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
 
         response.match(
             (l) => SnackBarService.showNegativeSnackBar(
-                context: context, message: l.message),
-            (r) => SnackBarService.showPositiveSnackBar(
-                context: context,
-                message:
-                    "${r.name} ${widget.pid == null ? 'added to products' : 'updated'} successfully"));
+                context: context, message: l.message), (r) {
+          SnackBarService.showPositiveSnackBar(
+              context: context,
+              message:
+                  "${r.name} ${widget.pid == null ? 'added to products' : 'updated'} successfully");
+
+          Navigator.pop(context);
+        });
       } else {
         SnackBarService.showNegativeSnackBar(
             context: context, message: "Invalid Data");
