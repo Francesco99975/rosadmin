@@ -47,6 +47,9 @@ class Customer {
       'email': email,
       'address': address,
       'phone': phone,
+      'created': created.toIso8601String(),
+      'last_ordered': lastOrdered.toIso8601String(),
+      'total_spent': totalSpent
     };
   }
 

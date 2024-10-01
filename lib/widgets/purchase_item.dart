@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:rosadmin/utils/capitalizer.dart';
 
 class PurchaseItem extends StatelessWidget {
   final int quantity;
@@ -16,30 +18,33 @@ class PurchaseItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final moneyFormatter =
+        NumberFormat.simpleCurrency(locale: 'en_CA', name: 'CAD');
     return ListTile(
       leading: CircleAvatar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         child: Text(
           quantity.toString(),
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       title: Text(
-        productName,
+        capitalizer(productName),
         style: const TextStyle(
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
         ),
       ),
-      subtitle: Text(category),
+      subtitle: Text(capitalizer(category)),
       trailing: Text(
-        '\$$totalCost',
-        style: const TextStyle(
+        moneyFormatter.format(totalCost),
+        style: TextStyle(
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );

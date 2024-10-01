@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rosadmin/main.dart';
+import 'package:rosadmin/models/customer.dart';
 import 'package:rosadmin/models/purchase.dart';
 import 'package:rosadmin/screens/categories.dart';
 import 'package:rosadmin/screens/costumers/costimer_detail.dart';
@@ -87,15 +88,9 @@ final GoRouter router = GoRouter(
       name: "costumer_detail",
       builder: (BuildContext context, GoRouterState state) {
         return CustomerDetailsScreen(
-          fullName: state.uri.queryParameters['fullname'] ?? "",
-          email: state.uri.queryParameters['category'] ?? "",
-          address: state.uri.queryParameters['description'] ?? "",
-          phone: state.uri.queryParameters['imageUrl'] ?? "",
-          created: DateTime.parse(state.uri.queryParameters['created'] ?? "0"),
-          lastOrdered:
-              DateTime.parse(state.uri.queryParameters['last_ordered'] ?? "0"),
-          totalSpent:
-              double.parse(state.uri.queryParameters['total_spent'] ?? "0.0"),
+          customer: Customer.fromJson(
+            state.uri.queryParameters['customer'] ?? "{}",
+          ),
         );
       },
     ),
@@ -109,9 +104,11 @@ final GoRouter router = GoRouter(
       name: "order_detail",
       builder: (BuildContext context, GoRouterState state) {
         return OrderDetailsScreen(
-          customer: state.uri.queryParameters['fullname'] ?? "",
+          customer:
+              Customer.fromJson(state.uri.queryParameters['customer'] ?? ""),
           pickuptime:
               DateTime.parse(state.uri.queryParameters['pickuptime'] ?? ""),
+          created: DateTime.parse(state.uri.queryParameters['created'] ?? ""),
           purchases:
               ((jsonDecode(state.uri.queryParameters['purchases'] ?? "[]"))
                       as List<dynamic>)

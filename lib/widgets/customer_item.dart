@@ -16,17 +16,10 @@ class CustomerItem extends StatelessWidget {
     return Card(
       elevation: 3.0,
       child: ListTile(
-        onLongPress: () =>
-            context.pushNamed('customer_detail', queryParameters: {
-          'id': customer.id,
-          'name': customer.fullname,
-          'email': customer.email,
-          'address': customer.address,
-          'phone': customer.phone,
-          'created': customer.created.toIso8601String(),
-          'last_ordered': customer.lastOrdered.toIso8601String(),
-          'total_spent': (customer.totalSpent / 100).toString(),
-        }),
+        onLongPress: () => context.pushNamed(
+          'costumer_detail',
+          queryParameters: {'customer': customer.toJson()},
+        ),
         title: Text(
           customer.fullname,
           style: const TextStyle(
@@ -39,7 +32,10 @@ class CustomerItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.email),
+              icon: Icon(
+                Icons.email,
+                color: Theme.of(context).colorScheme.primary,
+              ),
               onPressed: () async {
                 final url = Uri.parse('mailto:${customer.email}');
                 if (await canLaunchUrl(url)) {
@@ -48,7 +44,10 @@ class CustomerItem extends StatelessWidget {
               },
             ),
             IconButton(
-              icon: const Icon(Icons.phone),
+              icon: Icon(
+                Icons.phone,
+                color: Theme.of(context).colorScheme.primary,
+              ),
               onPressed: () {
                 _showConfirmationDialog(context, customer.phone);
               },

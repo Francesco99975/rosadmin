@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:rosadmin/models/customer.dart';
 import 'package:rosadmin/models/purchase.dart';
 import 'package:rosadmin/widgets/purchase_item.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   static const routePath = "/orders/detail";
 
-  final String customer;
+  final Customer customer;
   final List<Purchase> purchases;
   final double total;
   final DateTime pickuptime;
+  final DateTime created;
   final String method;
   final bool fulfilled;
 
@@ -18,6 +22,7 @@ class OrderDetailsScreen extends StatelessWidget {
     required this.purchases,
     required this.total,
     required this.pickuptime,
+    required this.created,
     required this.method,
     required this.fulfilled,
   });
@@ -33,38 +38,131 @@ class OrderDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (!fulfilled)
+              Row(
+                children: <Widget>[
+                  // First button (TextButton with Warning icon and text)
+                  Expanded(
+                    flex: 3,
+                    child: TextButton(
+                      onPressed: () {
+                        // Handle the press event
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors
+                            .amber, // Warning yellow color for icon and text
+                      ),
+                      child: const Column(
+                        children: [
+                          Icon(
+                            Icons.warning,
+                            size: 40,
+                            color: Colors.amber,
+                          ),
+                          SizedBox(height: 8), // Space between icon and text
+                          Text(
+                            "Force Fulfill",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.amber,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16), // Space between the two buttons
+                  // Second button (ElevatedButton with QR code icon and text)
+                  Expanded(
+                    flex: 3,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle the press event
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .primary, // Primary color for button
+                        foregroundColor: Theme.of(context)
+                            .colorScheme
+                            .onPrimary, // onPrimary for text
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16.0), // Padding for the button
+                      ),
+                      child: const Column(
+                        children: [
+                          Icon(
+                            Icons.qr_code,
+                            size: 40,
+                          ),
+                          SizedBox(height: 8), // Space between icon and text
+                          Text(
+                            "Scan to Fulfill",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            const SizedBox(height: 30.0),
             InkWell(
               onTap: () {
-                // Navigate to CustomerDetailScreen
-                // Replace with actual navigation logic
+                // Navigate to the customer details screen
+                context.pushNamed(
+                  'costumer_detail',
+                  queryParameters: {'customer': customer.toJson()},
+                );
               },
               child: Text(
-                'Customer: $customer',
-                style: const TextStyle(
+                'Customer: ${customer.fullname}',
+                style: TextStyle(
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
-                  color: Colors.blue,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
+              ),
+            ),
+            Text(
+              'Email: ${customer.email}',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(height: 16),
             Card(
-              elevation: 4,
+              elevation: 5.0,
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Total Cost: \$${total.toStringAsFixed(2)}',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     const SizedBox(height: 16),
-                    Text('Pickup Date & Time: $pickuptime'),
+                    Text(
+                        'Order Creation Date & Time: ${DateFormat.yMMMMEEEEd().format(created)} at ${DateFormat.jm().format(created)}',
+                        style: const TextStyle(fontSize: 16)),
                     const SizedBox(height: 8),
-                    Text('Payment Method: $method'),
+                    Text(
+                        'Pickup Date & Time: ${DateFormat.yMMMMEEEEd().format(pickuptime)} at ${DateFormat.jm().format(pickuptime)}',
+                        style: const TextStyle(fontSize: 16)),
                     const SizedBox(height: 8),
-                    Text('Status: ${fulfilled ? 'Fulfilled' : 'Unfulfilled'}'),
+                    Text('Payment Method: ${method.toUpperCase()}',
+                        style: const TextStyle(fontSize: 16)),
+                    const SizedBox(height: 8),
+                    Text('Status: ${fulfilled ? 'Fulfilled' : 'Unfulfilled'}',
+                        style: const TextStyle(fontSize: 16)),
                   ],
                 ),
               ),

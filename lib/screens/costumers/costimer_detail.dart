@@ -1,30 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:rosadmin/models/customer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomerDetailsScreen extends StatelessWidget {
   static const routePath = "/customers/detail";
 
-  final String fullName;
-  final String email;
-  final String address;
-  final String phone;
-  final DateTime created;
-  final DateTime lastOrdered;
-  final double totalSpent;
+  final Customer customer;
 
   const CustomerDetailsScreen({
     super.key,
-    required this.fullName,
-    required this.email,
-    required this.address,
-    required this.phone,
-    required this.created,
-    required this.lastOrdered,
-    required this.totalSpent,
+    required this.customer,
   });
 
   @override
   Widget build(BuildContext context) {
+    final moneyFormatter =
+        NumberFormat.simpleCurrency(locale: 'en_CA', name: 'CAD');
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -35,6 +27,7 @@ class CustomerDetailsScreen extends StatelessWidget {
                 Navigator.of(context).pop();
               },
             ),
+            title: const Text('Customer Details'),
           ),
           SliverPadding(
             padding: const EdgeInsets.all(16),
@@ -43,36 +36,48 @@ class CustomerDetailsScreen extends StatelessWidget {
                 [
                   const Text(
                     'Full Name:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  Text(fullName),
+                  Text(customer.fullname,
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.primary)),
                   const SizedBox(height: 16),
-                  _buildClickableField(
-                      'Email:', email, () => _launchEmail(email)),
+                  _buildClickableField('Email:', customer.email,
+                      () => _launchEmail(customer.email), context),
                   const SizedBox(height: 16),
-                  _buildClickableField(
-                      'Address:', address, () => _launchMap(address)),
+                  _buildClickableField('Address:', customer.address,
+                      () => _launchMap(customer.address), context),
                   const SizedBox(height: 16),
-                  _buildClickableField(
-                      'Phone:', phone, () => _launchPhone(phone)),
+                  _buildClickableField('Phone:', customer.phone,
+                      () => _launchPhone(customer.phone), context),
                   const SizedBox(height: 16),
                   const Text(
                     'Date Created:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  Text(created.toString()),
+                  Text(DateFormat.yMMMMEEEEd().format(customer.created),
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.primary)),
                   const SizedBox(height: 16),
                   const Text(
                     'Date of Last Order:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  Text(lastOrdered.toString()),
+                  Text(DateFormat.yMMMMEEEEd().format(customer.lastOrdered),
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.primary)),
                   const SizedBox(height: 16),
                   const Text(
                     'Total Spent:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  Text(totalSpent.toString()),
+                  Text(moneyFormatter.format(customer.totalSpent / 100.0),
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.primary))
                 ],
               ),
             ),
@@ -82,7 +87,8 @@ class CustomerDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildClickableField(String label, String value, VoidCallback onTap) {
+  Widget _buildClickableField(
+      String label, String value, VoidCallback onTap, BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Column(
@@ -90,13 +96,14 @@ class CustomerDetailsScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
           Text(
             value,
-            style: const TextStyle(
-              color: Colors.blue,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
               decoration: TextDecoration.underline,
+              fontSize: 16,
             ),
           ),
         ],
