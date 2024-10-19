@@ -20,7 +20,7 @@ class AsyncProviderComparer<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return switch (state) {
       AsyncData(:final value) => value.match((_) => errorWidget, render),
-      AsyncError() => const Placeholder(),
+      AsyncError() => errorWidget,
       _ => loadingWidget,
     };
   }

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:rosadmin/models/customer.dart';
 import 'package:rosadmin/models/purchase.dart';
+import 'package:rosadmin/providers/orders.dart';
 import 'package:rosadmin/widgets/purchase_item.dart';
 
-class OrderDetailsScreen extends StatelessWidget {
+class OrderDetailsScreen extends ConsumerWidget {
   static const routePath = "/orders/detail";
 
+  final String orderId;
   final Customer customer;
   final List<Purchase> purchases;
   final double total;
@@ -18,6 +21,7 @@ class OrderDetailsScreen extends StatelessWidget {
 
   const OrderDetailsScreen({
     super.key,
+    required this.orderId,
     required this.customer,
     required this.purchases,
     required this.total,
@@ -28,7 +32,7 @@ class OrderDetailsScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Order Details'),
@@ -45,9 +49,9 @@ class OrderDetailsScreen extends StatelessWidget {
                   Expanded(
                     flex: 3,
                     child: TextButton(
-                      onPressed: () {
-                        // Handle the press event
-                      },
+                      onPressed: () => ref
+                          .read(ordersProvider.notifier)
+                          .fulfillOrder(orderId),
                       style: TextButton.styleFrom(
                         foregroundColor: Colors
                             .amber, // Warning yellow color for icon and text

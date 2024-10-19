@@ -20,4 +20,6 @@ class Endpoints {
   static const customersEndpoint = "$adminBaseUrl/customers";
 
   static const ordersEndpoint = "$adminBaseUrl/orders";
+
+  static const fulfillEndpoint = "$adminBaseUrl/fulfill";
 }

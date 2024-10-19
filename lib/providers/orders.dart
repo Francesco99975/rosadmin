@@ -62,6 +62,23 @@ class Orders extends _$Orders {
     });
   }
 
+  Future<Either<Failure, model.Order>> fulfillOrder(String orderId) async {
+    final network = ref.read(networkProvider);
+
+    return network.match((l) => Left(Failure(message: l.message)),
+        (network) async {
+      final response =
+          await network.getRequest(url: "${Endpoints.ordersEndpoint}/$orderId");
+
+      return response.match((l) => Left(l), (r) {
+        final List<dynamic> data = jsonDecode(r.body);
+        final updatedState = (data.map((e) => model.Order.fromMap(e)).toList());
+        state = AsyncValue.data(Right(updatedState));
+        return Right(updatedState.last);
+      });
+    });
+  }
+
   Future<Either<Failure, model.Order>> remove(model.Order order) async {
     final network = ref.read(networkProvider);
 

@@ -56,6 +56,7 @@ class OrderItem extends StatelessWidget {
         ),
         child: ListTile(
           onTap: () => context.pushNamed('order_detail', queryParameters: {
+            "orderId": order.id,
             "customer": order.customer.toJson(),
             "purchases":
                 jsonEncode(order.purchases.map((e) => e.toJson()).toList()),

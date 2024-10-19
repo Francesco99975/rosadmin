@@ -104,6 +104,7 @@ final GoRouter router = GoRouter(
       name: "order_detail",
       builder: (BuildContext context, GoRouterState state) {
         return OrderDetailsScreen(
+          orderId: state.uri.queryParameters['orderId'] ?? "",
           customer:
               Customer.fromJson(state.uri.queryParameters['customer'] ?? ""),
           pickuptime:
