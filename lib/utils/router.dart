@@ -13,6 +13,7 @@ import 'package:rosadmin/screens/orders/orders_detail.dart';
 import 'package:rosadmin/screens/products/product_detail.dart';
 import 'package:rosadmin/screens/products/product_form.dart';
 import 'package:rosadmin/screens/products/products.dart';
+import 'package:rosadmin/screens/scanner.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: SplashView.routePath,
@@ -98,6 +99,11 @@ final GoRouter router = GoRouter(
         path: OrderScreen.routePath,
         builder: (BuildContext context, GoRouterState state) {
           return const OrderScreen();
+        }),
+    GoRoute(
+        path: QRScannerScreen.routePath,
+        builder: (BuildContext context, GoRouterState state) {
+          return const QRScannerScreen();
         }),
     GoRoute(
       path: OrderDetailsScreen.routePath,

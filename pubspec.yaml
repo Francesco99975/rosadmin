@@ -40,7 +40,7 @@ dependencies:
   go_router: ^13.1.0
   json_theme: ^6.4.0
   fpdart: ^1.1.0
-  flutter_secure_storage: ^4.2.1
+  flutter_secure_storage: ^9.0.0
   http: ^1.2.0
   web_socket_channel: ^2.4.0
   fl_chart: ^0.67.0
@@ -50,6 +50,7 @@ dependencies:
   mime: ^1.0.5
   http_parser: ^4.0.2
   cached_network_image: ^3.3.1
+  mobile_scanner: ^6.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:rosadmin/models/customer.dart';
 import 'package:rosadmin/models/purchase.dart';
 import 'package:rosadmin/providers/orders.dart';
+import 'package:rosadmin/screens/scanner.dart';
 import 'package:rosadmin/widgets/purchase_item.dart';
 
 class OrderDetailsScreen extends ConsumerWidget {
@@ -81,9 +82,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                   Expanded(
                     flex: 3,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Handle the press event
-                      },
+                      onPressed: () => context.go(QRScannerScreen.routePath),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context)
                             .colorScheme
