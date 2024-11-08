@@ -67,8 +67,8 @@ class Orders extends _$Orders {
 
     return network.match((l) => Left(Failure(message: l.message)),
         (network) async {
-      final response =
-          await network.getRequest(url: "${Endpoints.ordersEndpoint}/$orderId");
+      final response = await network.getRequest(
+          url: "${Endpoints.fulfillEndpoint}/$orderId");
 
       return response.match((l) => Left(l), (r) {
         final List<dynamic> data = jsonDecode(r.body);

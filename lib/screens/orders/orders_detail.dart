@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +8,7 @@ import 'package:rosadmin/models/customer.dart';
 import 'package:rosadmin/models/purchase.dart';
 import 'package:rosadmin/providers/orders.dart';
 import 'package:rosadmin/screens/scanner.dart';
+import 'package:rosadmin/utils/snackbar_service.dart';
 import 'package:rosadmin/widgets/purchase_item.dart';
 
 class OrderDetailsScreen extends ConsumerWidget {
@@ -50,9 +53,18 @@ class OrderDetailsScreen extends ConsumerWidget {
                   Expanded(
                     flex: 3,
                     child: TextButton(
-                      onPressed: () => ref
-                          .read(ordersProvider.notifier)
-                          .fulfillOrder(orderId),
+                      onPressed: () async {
+                        final res = await ref
+                            .watch(ordersProvider.notifier)
+                            .fulfillOrder(orderId);
+
+                        res.match(
+                            (l) => SnackBarService.showNegativeSnackBar(
+                                context: context, message: l.message), (_) {
+                          SnackBarService.showPositiveSnackBar(
+                              context: context, message: "Order fulfilled");
+                        });
+                      },
                       style: TextButton.styleFrom(
                         foregroundColor: Colors
                             .amber, // Warning yellow color for icon and text
@@ -77,40 +89,42 @@ class OrderDetailsScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16), // Space between the two buttons
-                  // Second button (ElevatedButton with QR code icon and text)
-                  Expanded(
-                    flex: 3,
-                    child: ElevatedButton(
-                      onPressed: () => context.go(QRScannerScreen.routePath),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context)
-                            .colorScheme
-                            .primary, // Primary color for button
-                        foregroundColor: Theme.of(context)
-                            .colorScheme
-                            .onPrimary, // onPrimary for text
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 16.0), // Padding for the button
-                      ),
-                      child: const Column(
-                        children: [
-                          Icon(
-                            Icons.qr_code,
-                            size: 40,
-                          ),
-                          SizedBox(height: 8), // Space between icon and text
-                          Text(
-                            "Scan to Fulfill",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
+                  if (Platform.isAndroid || Platform.isIOS)
+                    const SizedBox(width: 16), // Space between the two buttons
+                  if (Platform.isAndroid || Platform.isIOS)
+                    // Second button (ElevatedButton with QR code icon and text)
+                    Expanded(
+                      flex: 3,
+                      child: ElevatedButton(
+                        onPressed: () => context.go(QRScannerScreen.routePath),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context)
+                              .colorScheme
+                              .primary, // Primary color for button
+                          foregroundColor: Theme.of(context)
+                              .colorScheme
+                              .onPrimary, // onPrimary for text
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16.0), // Padding for the button
+                        ),
+                        child: const Column(
+                          children: [
+                            Icon(
+                              Icons.qr_code,
+                              size: 40,
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 8), // Space between icon and text
+                            Text(
+                              "Scan to Fulfill",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
             const SizedBox(height: 30.0),

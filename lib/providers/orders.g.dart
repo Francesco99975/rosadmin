@@ -6,7 +6,7 @@ part of 'orders.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$ordersHash() => r'5b01e2dba3c22a14600da4eea105ad3e669e172e';
+String _$ordersHash() => r'a2c08ad23ecd101ee1fc998555c8581d5f0976d6';
 
 /// See also [Orders].
 @ProviderFor(Orders)
@@ -22,4 +22,4 @@ final ordersProvider = AutoDisposeAsyncNotifierProvider<Orders,
 
 typedef _$Orders = AutoDisposeAsyncNotifier<Either<Failure, List<model.Order>>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

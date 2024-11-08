@@ -31,9 +31,8 @@ class DashboardScreen extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.exit_to_app),
               onPressed: () {
-                userx
-                    .logout()
-                    .then((value) => {context.go(AuthScreen.routePath)});
+                userx.logout().then((value) =>
+                    {if (context.mounted) context.go(AuthScreen.routePath)});
               },
             ),
           ],

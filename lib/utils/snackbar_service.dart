@@ -20,7 +20,7 @@ class SnackBarService {
   }) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
-      backgroundColor: Theme.of(context).colorScheme.onBackground,
+      backgroundColor: Theme.of(context).colorScheme.onSurface,
       duration: duration ?? const Duration(seconds: 3),
     ));
   }

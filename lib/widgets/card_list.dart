@@ -32,7 +32,7 @@ class CardList extends StatelessWidget {
               ? Center(
                   child: Container(
                     padding: const EdgeInsets.all(16.0),
-                    color: Theme.of(context).colorScheme.background,
+                    color: Theme.of(context).colorScheme.surface,
                     child: Text(
                       'NOT ENOUGH DATA',
                       textAlign: TextAlign.center,

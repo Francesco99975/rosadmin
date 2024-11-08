@@ -172,20 +172,20 @@ class _FinancesStatsState extends ConsumerState<FinancesStats> {
                       dateFilterLabel:
                           Selectors.timeframeSelectors[selectedTimeframe] ??
                               "Period"),
-                  const SizedBox(height: 16.0),
-                  StatsChart(
-                      stats: [r.monetaryData],
-                      title: "Monetary Data",
-                      dateFilterLabel:
-                          Selectors.timeframeSelectors[selectedTimeframe] ??
-                              "Period"),
-                  const SizedBox(height: 16.0),
-                  StatsChart(
-                      stats: r.preferredMethodData,
-                      title: "Preferred Payment Methods",
-                      dateFilterLabel:
-                          Selectors.timeframeSelectors[selectedTimeframe] ??
-                              "Period"),
+                  // const SizedBox(height: 16.0),
+                  // StatsChart(
+                  //     stats: [r.monetaryData],
+                  //     title: "Monetary Data",
+                  //     dateFilterLabel:
+                  //         Selectors.timeframeSelectors[selectedTimeframe] ??
+                  //             "Period"),
+                  // const SizedBox(height: 16.0),
+                  // StatsChart(
+                  //     stats: r.preferredMethodData,
+                  //     title: "Preferred Payment Methods",
+                  //     dateFilterLabel:
+                  //         Selectors.timeframeSelectors[selectedTimeframe] ??
+                  //             "Period"),
                   const SizedBox(height: 16.0),
                   CardList(
                     title: 'Top Orders',
