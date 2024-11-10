@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:rosadmin/models/dataset.dart';
-import 'package:rosadmin/utils/capitalizer.dart';
+import 'package:rosadmin/utils/responsive.dart';
 
 class StatsChart extends StatelessWidget {
   final String title;
@@ -17,6 +17,9 @@ class StatsChart extends StatelessWidget {
 
   // Function to truncate horizontal values if they are strings
   String _truncateLabel(String label, double screenWidth) {
+    if (label.contains('-')) {
+      return label;
+    }
     return screenWidth < 950 ? label.substring(0, 3) : label;
   }
 
@@ -60,11 +63,7 @@ class StatsChart extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     // Calculate dynamic aspect ratio based on screen width (you can adjust the logic as needed)
-    double aspectRatio = screenWidth > 600
-        ? 2.5
-        : screenWidth > 400
-            ? 2.2
-            : 2.0;
+    double aspectRatio = responsiveAspectRatio(screenWidth);
 
     // Find the maximum value in the vertical axis
     double maxY = stats.fold<double>(0, (max, stat) {
@@ -88,8 +87,7 @@ class StatsChart extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(
           left: 12,
-          right:
-              28, // You can dynamically change this value based on screen size if needed
+          right: 28,
           top: 22,
           bottom: 12,
         ),
@@ -100,7 +98,7 @@ class StatsChart extends StatelessWidget {
             ),
             lineBarsData: stats
                 .map((stat) => LineChartBarData(
-                      barWidth: 3,
+                      barWidth: responsiveBarWidth(screenWidth),
                       color: stat.color == 0
                           ? Theme.of(context).colorScheme.primary
                           : Color(stat.color),
@@ -139,7 +137,7 @@ class StatsChart extends StatelessWidget {
                 axisNameWidget: Text(
                   dateFilterLabel,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: calculateFontSize(screenWidth),
                     color: Theme.of(context).colorScheme.secondary,
                     fontWeight: FontWeight.bold,
                   ),
