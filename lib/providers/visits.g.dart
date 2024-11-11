@@ -173,5 +173,189 @@ class _VisitsProviderElement
   @override
   String get timeframe => (origin as VisitsProvider).timeframe;
 }
+
+String _$vistatHash() => r'736df73650ab14bd1d01e9ce97816059112f4ecc';
+
+/// See also [vistat].
+@ProviderFor(vistat)
+final vistatProvider =
+    AutoDisposeFutureProvider<Either<Failure, VisitStats>>.internal(
+  vistat,
+  name: r'vistatProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$vistatHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef VistatRef = AutoDisposeFutureProviderRef<Either<Failure, VisitStats>>;
+String _$visdataHash() => r'3649170f58faa486c2350087c5062429f4fefc15';
+
+/// See also [visdata].
+@ProviderFor(visdata)
+const visdataProvider = VisdataFamily();
+
+/// See also [visdata].
+class VisdataFamily extends Family<AsyncValue<Either<Failure, GraphData>>> {
+  /// See also [visdata].
+  const VisdataFamily();
+
+  /// See also [visdata].
+  VisdataProvider call(
+    String quality,
+    String timeframe,
+  ) {
+    return VisdataProvider(
+      quality,
+      timeframe,
+    );
+  }
+
+  @override
+  VisdataProvider getProviderOverride(
+    covariant VisdataProvider provider,
+  ) {
+    return call(
+      provider.quality,
+      provider.timeframe,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'visdataProvider';
+}
+
+/// See also [visdata].
+class VisdataProvider
+    extends AutoDisposeFutureProvider<Either<Failure, GraphData>> {
+  /// See also [visdata].
+  VisdataProvider(
+    String quality,
+    String timeframe,
+  ) : this._internal(
+          (ref) => visdata(
+            ref as VisdataRef,
+            quality,
+            timeframe,
+          ),
+          from: visdataProvider,
+          name: r'visdataProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$visdataHash,
+          dependencies: VisdataFamily._dependencies,
+          allTransitiveDependencies: VisdataFamily._allTransitiveDependencies,
+          quality: quality,
+          timeframe: timeframe,
+        );
+
+  VisdataProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.quality,
+    required this.timeframe,
+  }) : super.internal();
+
+  final String quality;
+  final String timeframe;
+
+  @override
+  Override overrideWith(
+    FutureOr<Either<Failure, GraphData>> Function(VisdataRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: VisdataProvider._internal(
+        (ref) => create(ref as VisdataRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        quality: quality,
+        timeframe: timeframe,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Either<Failure, GraphData>> createElement() {
+    return _VisdataProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is VisdataProvider &&
+        other.quality == quality &&
+        other.timeframe == timeframe;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, quality.hashCode);
+    hash = _SystemHash.combine(hash, timeframe.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin VisdataRef on AutoDisposeFutureProviderRef<Either<Failure, GraphData>> {
+  /// The parameter `quality` of this provider.
+  String get quality;
+
+  /// The parameter `timeframe` of this provider.
+  String get timeframe;
+}
+
+class _VisdataProviderElement
+    extends AutoDisposeFutureProviderElement<Either<Failure, GraphData>>
+    with VisdataRef {
+  _VisdataProviderElement(super.provider);
+
+  @override
+  String get quality => (origin as VisdataProvider).quality;
+  @override
+  String get timeframe => (origin as VisdataProvider).timeframe;
+}
+
+String _$vistandsHash() => r'd276b1689ec967924beb778f8a101a0b9d4c529d';
+
+/// See also [vistands].
+@ProviderFor(vistands)
+final vistandsProvider =
+    AutoDisposeFutureProvider<Either<Failure, VisitStandings>>.internal(
+  vistands,
+  name: r'vistandsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$vistandsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef VistandsRef
+    = AutoDisposeFutureProviderRef<Either<Failure, VisitStandings>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

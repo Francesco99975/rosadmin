@@ -5,7 +5,7 @@ import 'package:rosadmin/models/product.dart';
 import 'package:rosadmin/providers/categories.dart';
 import 'package:rosadmin/providers/products.dart';
 import 'package:rosadmin/screens/products/product_form.dart';
-import 'package:rosadmin/widgets/async_provider_comparer.dart';
+import 'package:rosadmin/widgets/async_provider_overwriter.dart';
 import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 import 'package:rosadmin/widgets/empty.dart';
 import 'package:rosadmin/widgets/fab.dart';
@@ -51,7 +51,7 @@ class ProductScreen extends ConsumerWidget {
                               .remove(product));
                     },
                   ),
-            floatingActionButton: AsyncProviderComparer(
+            floatingActionButton: AsyncProviderOverwriter(
                 state: ref.watch(categoriesProvider),
                 loadingWidget:
                     const LoadingFAB(tooltip: "loading", icon: Icons.refresh),

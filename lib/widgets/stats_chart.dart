@@ -135,7 +135,7 @@ class StatsChart extends StatelessWidget {
               ),
               bottomTitles: AxisTitles(
                 axisNameWidget: Text(
-                  dateFilterLabel,
+                  title,
                   style: TextStyle(
                     fontSize: calculateFontSize(screenWidth),
                     color: Theme.of(context).colorScheme.secondary,
@@ -154,7 +154,7 @@ class StatsChart extends StatelessWidget {
               leftTitles: AxisTitles(
                 axisNameSize: 20,
                 axisNameWidget: Text(
-                  title,
+                  dateFilterLabel,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   ),

@@ -152,3 +152,118 @@ class Visit {
   factory Visit.fromJson(String source) =>
       Visit.fromMap(jsonDecode(source) as Map<String, dynamic>);
 }
+
+class VisitStandings {
+  static const VISIT_ORIGINS = "visit_origins";
+  static const DEVICE_ORIGINS = "device_origins";
+
+  final List<VisitOrigin> visitOrigins;
+  final List<DeviceOrigin> deviceOrigins;
+
+  VisitStandings({
+    required this.visitOrigins,
+    required this.deviceOrigins,
+  });
+
+  VisitStandings copyWith({
+    List<VisitOrigin>? visitOrigins,
+    List<DeviceOrigin>? deviceOrigins,
+  }) {
+    return VisitStandings(
+      visitOrigins: visitOrigins ?? this.visitOrigins,
+      deviceOrigins: deviceOrigins ?? this.deviceOrigins,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      VISIT_ORIGINS: visitOrigins,
+      DEVICE_ORIGINS: deviceOrigins,
+    };
+  }
+
+  factory VisitStandings.fromMap(Map<String, dynamic> map) {
+    return VisitStandings(
+      visitOrigins: (map[VISIT_ORIGINS] as List<dynamic>)
+          .map((e) => VisitOrigin.fromMap(e))
+          .toList(),
+      deviceOrigins: (map[DEVICE_ORIGINS] as List<dynamic>)
+          .map((e) => DeviceOrigin.fromMap(e))
+          .toList(),
+    );
+  }
+
+  String toJson() => jsonEncode(toMap());
+
+  factory VisitStandings.fromJson(String source) =>
+      VisitStandings.fromMap(jsonDecode(source) as Map<String, dynamic>);
+}
+
+class VisitStats {
+  static const CURRENT = "current";
+  static const TOTAL_VIEWS = "total_views";
+  static const BOUNCE_RATE = "bounce_rate";
+  static const AVG_VISIT_DURATION = "avg_visit_duration";
+  static const TOTAL_VISITS = "total_visits";
+  static const TOTAL_UNIQUE_VISITORS = "total_unique_visitors";
+
+  final int current;
+  final int totalViews;
+  final String bounceRate;
+  final int avgVisitDuration;
+  final int totalVisitors;
+  final int totalUniqueVisitors;
+
+  VisitStats(
+      {required this.current,
+      required this.totalViews,
+      required this.bounceRate,
+      required this.avgVisitDuration,
+      required this.totalVisitors,
+      required this.totalUniqueVisitors});
+
+  VisitStats copyWith({
+    int? current,
+    int? totalViews,
+    String? bounceRate,
+    int? avgVisitDuration,
+    int? totalVisitors,
+    int? totalUniqueVisitors,
+  }) {
+    return VisitStats(
+      current: current ?? this.current,
+      totalViews: totalViews ?? this.totalViews,
+      bounceRate: bounceRate ?? this.bounceRate,
+      avgVisitDuration: avgVisitDuration ?? this.avgVisitDuration,
+      totalVisitors: totalVisitors ?? this.totalVisitors,
+      totalUniqueVisitors: totalUniqueVisitors ?? this.totalUniqueVisitors,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      CURRENT: current,
+      TOTAL_VIEWS: totalViews,
+      BOUNCE_RATE: bounceRate,
+      AVG_VISIT_DURATION: avgVisitDuration,
+      TOTAL_VISITS: totalVisitors,
+      TOTAL_UNIQUE_VISITORS: totalUniqueVisitors,
+    };
+  }
+
+  factory VisitStats.fromMap(Map<String, dynamic> map) {
+    return VisitStats(
+      current: map[CURRENT],
+      totalViews: map[TOTAL_VIEWS],
+      bounceRate: map[BOUNCE_RATE],
+      avgVisitDuration: map[AVG_VISIT_DURATION],
+      totalVisitors: map[TOTAL_VISITS],
+      totalUniqueVisitors: map[TOTAL_UNIQUE_VISITORS],
+    );
+  }
+
+  String toJson() => jsonEncode(toMap());
+
+  factory VisitStats.fromJson(String source) =>
+      VisitStats.fromMap(jsonDecode(source) as Map<String, dynamic>);
+}

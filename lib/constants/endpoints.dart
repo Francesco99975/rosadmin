@@ -9,7 +9,27 @@ class Endpoints {
 
   static const visitsEndpoint = "$adminBaseUrl/visits";
 
+  static const visitsStatsEndpoint = "$visitsEndpoint/stats";
+
+  static const visitsGraphEndpoint = "$visitsEndpoint/graph";
+
+  static const visitsStandingsEndpoint = "$visitsEndpoint/standings";
+
   static const financesEndpoint = "$adminBaseUrl/finances";
+
+  static const finStatsEndpoint = "$financesEndpoint/stats";
+
+  static const finOrdersEndpoint = "$financesEndpoint/orders";
+
+  static const finMonetaryEndpoint = "$financesEndpoint/monetary";
+
+  static const finPaymentsEndpoint = "$financesEndpoint/payments";
+
+  static const finStatusEndpoint = "$financesEndpoint/status";
+
+  static const finMethodsEndpoint = "$financesEndpoint/methods";
+
+  static const finStandsEndpoint = "$financesEndpoint/standings";
 
   static const clienteleEndpoint = "$adminBaseUrl/clientele";
 

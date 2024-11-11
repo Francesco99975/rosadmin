@@ -137,6 +137,138 @@ class RankedGainer {
       RankedGainer.fromMap(jsonDecode(source) as Map<String, dynamic>);
 }
 
+class FinancesStats {
+  static const ORDERS_AMOUNT = "orders_amount";
+  static const OUTSTANDING_CASH = "outstanding_cash";
+  static const PENDING_MONEY = "pending_money";
+  static const GAINS = "gains";
+  static const TOTAL = "total";
+
+  final int ordersAmount;
+  final int outstandingCash;
+  final int pendingMoney;
+  final int gains;
+  final int total;
+
+  FinancesStats({
+    required this.ordersAmount,
+    required this.outstandingCash,
+    required this.pendingMoney,
+    required this.gains,
+    required this.total,
+  });
+
+  FinancesStats copyWith({
+    int? ordersAmount,
+    int? outstandingCash,
+    int? pendingMoney,
+    int? gains,
+    int? total,
+  }) {
+    return FinancesStats(
+      ordersAmount: ordersAmount ?? this.ordersAmount,
+      outstandingCash: outstandingCash ?? this.outstandingCash,
+      pendingMoney: pendingMoney ?? this.pendingMoney,
+      gains: gains ?? this.gains,
+      total: total ?? this.total,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      ORDERS_AMOUNT: ordersAmount,
+      OUTSTANDING_CASH: outstandingCash,
+      PENDING_MONEY: pendingMoney,
+      GAINS: gains,
+      TOTAL: total,
+    };
+  }
+
+  factory FinancesStats.fromMap(Map<String, dynamic> map) {
+    return FinancesStats(
+      ordersAmount: map[ORDERS_AMOUNT],
+      outstandingCash: map[OUTSTANDING_CASH],
+      pendingMoney: map[PENDING_MONEY],
+      gains: map[GAINS],
+      total: map[TOTAL],
+    );
+  }
+
+  String toJson() => jsonEncode(toMap());
+
+  factory FinancesStats.fromJson(String source) =>
+      FinancesStats.fromMap(jsonDecode(source) as Map<String, dynamic>);
+}
+
+class FinancesStandings {
+  static const RANKED_ORDERS = "ranked_orders";
+  static const TOPPED_SELLERS = "topped_sellers";
+  static const TOPPED_GAINERS = "topped_gainers";
+  static const FLOPPED_SELLERS = "flopped_sellers";
+  static const FLOPPED_GAINERS = "flopped_gainers";
+
+  final List<RankedOrder> rankedOrders;
+  final List<RankedSeller> toppedSellers;
+  final List<RankedGainer> toppedGainers;
+  final List<RankedSeller> floppedSellers;
+  final List<RankedGainer> floppedGainers;
+
+  FinancesStandings(
+      {required this.rankedOrders,
+      required this.toppedSellers,
+      required this.toppedGainers,
+      required this.floppedSellers,
+      required this.floppedGainers});
+
+  FinancesStandings copyWith(
+      {List<RankedOrder>? rankedOrders,
+      List<RankedSeller>? toppedSellers,
+      List<RankedGainer>? toppedGainers,
+      List<RankedSeller>? floppedSellers,
+      List<RankedGainer>? floppedGainers}) {
+    return FinancesStandings(
+        rankedOrders: rankedOrders ?? this.rankedOrders,
+        toppedSellers: toppedSellers ?? this.toppedSellers,
+        toppedGainers: toppedGainers ?? this.toppedGainers,
+        floppedSellers: floppedSellers ?? this.floppedSellers,
+        floppedGainers: floppedGainers ?? this.floppedGainers);
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      RANKED_ORDERS: rankedOrders,
+      TOPPED_SELLERS: toppedSellers,
+      TOPPED_GAINERS: toppedGainers,
+      FLOPPED_SELLERS: floppedSellers,
+      FLOPPED_GAINERS: floppedGainers
+    };
+  }
+
+  factory FinancesStandings.fromMap(Map<String, dynamic> map) {
+    return FinancesStandings(
+        rankedOrders: (map[RANKED_ORDERS] as List<dynamic>)
+            .map((e) => RankedOrder.fromMap(e))
+            .toList(),
+        toppedSellers: (map[TOPPED_SELLERS] as List<dynamic>)
+            .map((e) => RankedSeller.fromMap(e))
+            .toList(),
+        toppedGainers: (map[TOPPED_GAINERS] as List<dynamic>)
+            .map((e) => RankedGainer.fromMap(e))
+            .toList(),
+        floppedSellers: (map[FLOPPED_SELLERS] as List<dynamic>)
+            .map((e) => RankedSeller.fromMap(e))
+            .toList(),
+        floppedGainers: (map[FLOPPED_GAINERS] as List<dynamic>)
+            .map((e) => RankedGainer.fromMap(e))
+            .toList());
+  }
+
+  String toJson() => jsonEncode(toMap());
+
+  factory FinancesStandings.fromJson(String source) =>
+      FinancesStandings.fromMap(jsonDecode(source) as Map<String, dynamic>);
+}
+
 class Finances {
   static const ORDERS_AMOUNT = "orders_amount";
   static const OUTSTANDING_CASH = "outstanding_cash";
