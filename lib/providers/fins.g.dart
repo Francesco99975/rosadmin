@@ -371,7 +371,7 @@ class _FinordProviderElement
   String get status => (origin as FinordProvider).status;
 }
 
-String _$finmonHash() => r'9a4ce33a06697adfea01bc46f79fdf491c06bf47';
+String _$finmonHash() => r'fed05c501cf846e701912c5eac2481bdde2d2dc8';
 
 /// See also [finmon].
 @ProviderFor(finmon)
@@ -535,14 +535,14 @@ class _FinmonProviderElement
   String get status => (origin as FinmonProvider).status;
 }
 
-String _$finpayHash() => r'492928b5b504e68cebeec34420f6ffa1f4f46f4b';
+String _$finpayHash() => r'1ec7441690568188f86ebafae2bed405a12b6cd1';
 
 /// See also [finpay].
 @ProviderFor(finpay)
 const finpayProvider = FinpayFamily();
 
 /// See also [finpay].
-class FinpayFamily extends Family<AsyncValue<Either<Failure, GraphData>>> {
+class FinpayFamily extends Family<AsyncValue<Either<Failure, MultiGraphData>>> {
   /// See also [finpay].
   const FinpayFamily();
 
@@ -584,7 +584,7 @@ class FinpayFamily extends Family<AsyncValue<Either<Failure, GraphData>>> {
 
 /// See also [finpay].
 class FinpayProvider
-    extends AutoDisposeFutureProvider<Either<Failure, GraphData>> {
+    extends AutoDisposeFutureProvider<Either<Failure, MultiGraphData>> {
   /// See also [finpay].
   FinpayProvider(
     String timeframe,
@@ -623,7 +623,8 @@ class FinpayProvider
 
   @override
   Override overrideWith(
-    FutureOr<Either<Failure, GraphData>> Function(FinpayRef provider) create,
+    FutureOr<Either<Failure, MultiGraphData>> Function(FinpayRef provider)
+        create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -641,7 +642,8 @@ class FinpayProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<Either<Failure, GraphData>> createElement() {
+  AutoDisposeFutureProviderElement<Either<Failure, MultiGraphData>>
+      createElement() {
     return _FinpayProviderElement(this);
   }
 
@@ -664,7 +666,8 @@ class FinpayProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin FinpayRef on AutoDisposeFutureProviderRef<Either<Failure, GraphData>> {
+mixin FinpayRef
+    on AutoDisposeFutureProviderRef<Either<Failure, MultiGraphData>> {
   /// The parameter `timeframe` of this provider.
   String get timeframe;
 
@@ -673,7 +676,7 @@ mixin FinpayRef on AutoDisposeFutureProviderRef<Either<Failure, GraphData>> {
 }
 
 class _FinpayProviderElement
-    extends AutoDisposeFutureProviderElement<Either<Failure, GraphData>>
+    extends AutoDisposeFutureProviderElement<Either<Failure, MultiGraphData>>
     with FinpayRef {
   _FinpayProviderElement(super.provider);
 

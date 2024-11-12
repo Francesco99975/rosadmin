@@ -31,6 +31,36 @@ class GraphData {
       GraphData.fromMap(jsonDecode(source) as Map<String, dynamic>);
 }
 
+class MultiGraphData {
+  // ignore: constant_identifier_names
+  static const DATAPOINTS = "datapoints";
+
+  final List<Dataset> datapoints;
+
+  MultiGraphData({required this.datapoints});
+
+  MultiGraphData copyWith({
+    List<Dataset>? datapoints,
+  }) {
+    return MultiGraphData(datapoints: datapoints ?? this.datapoints);
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{DATAPOINTS: datapoints};
+  }
+
+  factory MultiGraphData.fromMap(Map<String, dynamic> map) {
+    return MultiGraphData(
+        datapoints:
+            (map[DATAPOINTS] as List).map((e) => Dataset.fromMap(e)).toList());
+  }
+
+  String toJson() => jsonEncode(toMap());
+
+  factory MultiGraphData.fromJson(String source) =>
+      MultiGraphData.fromMap(jsonDecode(source) as Map<String, dynamic>);
+}
+
 class GraphPie {
   // ignore: constant_identifier_names
   static const PIE = "pie";

@@ -191,7 +191,7 @@ final vistatProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef VistatRef = AutoDisposeFutureProviderRef<Either<Failure, VisitStats>>;
-String _$visdataHash() => r'3649170f58faa486c2350087c5062429f4fefc15';
+String _$visdataHash() => r'fc8e771c5bc491a5cb203f354522658ad46e14c6';
 
 /// See also [visdata].
 @ProviderFor(visdata)

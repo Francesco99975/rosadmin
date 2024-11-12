@@ -119,9 +119,9 @@ class _TrafficStatsState extends ConsumerState<TrafficStats> {
             ),
             const SizedBox(height: 10.0),
             AsyncProviderComparer(
-                provider: visdataProvider(selectedTimeframe, selectedQuality),
+                provider: visdataProvider(selectedQuality, selectedTimeframe),
                 future:
-                    visdataProvider(selectedTimeframe, selectedQuality).future,
+                    visdataProvider(selectedQuality, selectedTimeframe).future,
                 render: (r) => StatsChart(
                     stats: [r.data],
                     title:

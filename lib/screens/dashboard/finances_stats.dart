@@ -257,6 +257,7 @@ class _FinancesStatsState extends ConsumerState<FinancesStats> {
                         selectedStatusMon)
                     .future,
                 render: (graph) => StatsChart(
+                    divisible: true,
                     stats: [graph.data],
                     title: "Monetary Data",
                     dateFilterLabel:
@@ -311,10 +312,10 @@ class _FinancesStatsState extends ConsumerState<FinancesStats> {
                 future: finpayProvider(selectedTimeframePay, selectedStatusPay)
                     .future,
                 render: (graph) => StatsChart(
-                    stats: [graph.data],
+                    stats: graph.datapoints,
                     title: "Payment Method Data",
                     dateFilterLabel:
-                        Selectors.timeframeSelectors[selectedTimeframeMon] ??
+                        Selectors.timeframeSelectors[selectedTimeframePay] ??
                             "Period")),
             const SizedBox(height: 16.0),
             Center(

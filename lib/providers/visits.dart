@@ -47,7 +47,8 @@ Future<Either<Failure, GraphData>> visdata(
 
   return network.match((l) => Left(l), (network) async {
     final response = await network.getRequest(
-      url: "${Endpoints.visitsEndpoint}?quality=$quality&timeframe=$timeframe",
+      url:
+          "${Endpoints.visitsGraphEndpoint}?quality=$quality&timeframe=$timeframe",
     );
 
     return response.match((l) => Left(l), (r) {

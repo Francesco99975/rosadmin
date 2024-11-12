@@ -2,28 +2,34 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:rosadmin/models/dataset.dart';
+import 'package:rosadmin/utils/formatters.dart';
 import 'package:rosadmin/utils/responsive.dart';
 
 class StatsChart extends StatelessWidget {
   final String title;
   final String dateFilterLabel;
   final List<Dataset> stats;
+  final bool divisible;
 
   const StatsChart(
       {super.key,
       required this.stats,
       required this.title,
-      required this.dateFilterLabel});
+      required this.dateFilterLabel,
+      this.divisible = false});
 
-  // Function to truncate horizontal values if they are strings
   String _truncateLabel(String label, double screenWidth) {
     if (label.contains('-')) {
       return label;
     }
-    return screenWidth < 950 ? label.substring(0, 3) : label;
+    return label.substring(0, 3);
   }
 
   Widget _leftTitleWidgets(double value, TitleMeta meta, double screenWidth) {
+    String textValue = !divisible
+        ? value.toInt().toString()
+        : moneyFormatter.format(value / 100);
+
     final style = TextStyle(
       color: Colors.amber,
       fontSize: calculateFontSize(screenWidth),
@@ -31,16 +37,12 @@ class StatsChart extends StatelessWidget {
     return SideTitleWidget(
       axisSide: meta.axisSide,
       child: Padding(
-          padding: EdgeInsets.all(2.0),
-          child: Text('${value.toInt()}', style: style)),
+          padding: EdgeInsets.all(2.0), child: Text(textValue, style: style)),
     );
   }
 
   Widget _bottomTitleWidgets(double value, TitleMeta meta, double screenWidth) {
-    // Get the label to display on the horizontal axis
     String label = stats[0].horizontal[value.round()];
-
-    // If the label is a string, truncate it on small screens
     label = _truncateLabel(label, screenWidth);
 
     return SideTitleWidget(
@@ -59,35 +61,28 @@ class StatsChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the screen width to adapt the aspect ratio and padding dynamically
     double screenWidth = MediaQuery.of(context).size.width;
-
-    // Calculate dynamic aspect ratio based on screen width (you can adjust the logic as needed)
-    double aspectRatio = responsiveAspectRatio(screenWidth);
-
-    // Find the maximum value in the vertical axis
+    double aspectRatio = responsiveAspectRatio(screenWidth) *
+        0.8; // Adjust aspect ratio for more height
     double maxY = stats.fold<double>(0, (max, stat) {
       double maxStatValue =
           stat.vertical.reduce((a, b) => a > b ? a : b).toDouble();
       return max > maxStatValue ? max : maxStatValue;
     });
 
-    // Calculate dynamic interval and reserved size based on screen width and max Y value
     double interval = (maxY / 5).ceilToDouble();
     if (interval == 0) {
-      interval =
-          1; // Set a minimum interval of 1 if the calculated interval is zero
+      interval = 1;
     }
 
-    double reservedSize =
-        screenWidth > 600 ? 32 : 22; // Larger screens get more space for titles
+    double reservedSize = screenWidth > 600 ? 100 : 50;
 
     return AspectRatio(
       aspectRatio: aspectRatio,
       child: Padding(
         padding: EdgeInsets.only(
-          left: 12,
-          right: 28,
+          left: 20,
+          right: 20,
           top: 22,
           bottom: 12,
         ),
@@ -101,7 +96,7 @@ class StatsChart extends StatelessWidget {
                       barWidth: responsiveBarWidth(screenWidth),
                       color: stat.color == 0
                           ? Theme.of(context).colorScheme.primary
-                          : Color(stat.color),
+                          : Color(0xFF000000 | stat.color),
                       isStrokeCapRound: true,
                       dotData: const FlDotData(show: true),
                       belowBarData: BarAreaData(show: false),
@@ -161,9 +156,8 @@ class StatsChart extends StatelessWidget {
                 ),
                 sideTitles: SideTitles(
                   showTitles: true,
-                  interval: interval, // Use dynamic interval for Y-axis titles
-                  reservedSize:
-                      reservedSize, // Adjust reserved size dynamically
+                  interval: interval,
+                  reservedSize: reservedSize,
                   getTitlesWidget: (value, meta) =>
                       _leftTitleWidgets(value, meta, screenWidth),
                 ),

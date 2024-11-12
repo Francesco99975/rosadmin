@@ -70,7 +70,7 @@ Future<Either<Failure, GraphData>> finmon(
       (network) async {
     final response = await network.getRequest(
       url:
-          "${Endpoints.financesEndpoint}?timeframe=$timeframe&method=$method&status=$status",
+          "${Endpoints.finMonetaryEndpoint}?timeframe=$timeframe&method=$method&status=$status",
     );
 
     return response.match((l) => Left(l), (r) {
@@ -80,18 +80,19 @@ Future<Either<Failure, GraphData>> finmon(
 }
 
 @riverpod
-Future<Either<Failure, GraphData>> finpay(
+Future<Either<Failure, MultiGraphData>> finpay(
     Ref ref, String timeframe, String status) async {
   final network = ref.read(networkProvider);
 
   return network.match((l) => Left(Failure(message: l.message)),
       (network) async {
     final response = await network.getRequest(
-      url: "${Endpoints.financesEndpoint}?timeframe=$timeframe&status=$status",
+      url:
+          "${Endpoints.finPaymentsEndpoint}?timeframe=$timeframe&status=$status",
     );
 
     return response.match((l) => Left(l), (r) {
-      return Right(GraphData.fromJson(r.body));
+      return Right(MultiGraphData.fromJson(r.body));
     });
   });
 }
