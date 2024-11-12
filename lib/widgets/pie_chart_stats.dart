@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart' as fp;
 import 'package:rosadmin/models/pie.dart';
+import 'package:rosadmin/utils/responsive.dart';
 
 class PieChartStats extends StatefulWidget {
   final Pie pie;
@@ -42,10 +43,13 @@ class _PieChartStatsState extends State<PieChartStats> {
         ),
       );
     }
+
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return AspectRatio(
-      aspectRatio: 1.3,
+      aspectRatio: responsiveAspectRatio(screenWidth) * 0.8,
       child: AspectRatio(
-        aspectRatio: 1,
+        aspectRatio: responsiveAspectRatio(screenWidth) * 0.6,
         child: PieChart(
           PieChartData(
             pieTouchData: PieTouchData(
@@ -83,7 +87,7 @@ class _PieChartStatsState extends State<PieChartStats> {
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
       return PieChartSectionData(
-        color: Color(item.color),
+        color: Color(0xFF000000 | item.color),
         value: item.value,
         title: "${item.value}%",
         radius: radius,
@@ -96,7 +100,7 @@ class _PieChartStatsState extends State<PieChartStats> {
         badgeWidget: _Badge(
           _getIconDynamically(item.label),
           size: widgetSize,
-          borderColor: Colors.black,
+          borderColor: Theme.of(context).colorScheme.primaryFixedDim,
         ),
         badgePositionPercentageOffset: .98,
       );
@@ -134,7 +138,7 @@ class _Badge extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.transparent,
         shape: BoxShape.circle,
         border: Border.all(
           color: borderColor,
@@ -142,15 +146,18 @@ class _Badge extends StatelessWidget {
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withOpacity(.5),
-            offset: const Offset(3, 3),
-            blurRadius: 3,
+            color: Colors.black.withOpacity(.2),
+            offset: const Offset(2, 2),
+            blurRadius: 2,
           ),
         ],
       ),
       padding: EdgeInsets.all(size * .15),
       child: Center(
-        child: Icon(icon),
+        child: Icon(
+          icon,
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }

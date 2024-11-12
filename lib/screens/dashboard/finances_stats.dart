@@ -318,39 +318,81 @@ class _FinancesStatsState extends ConsumerState<FinancesStats> {
                         Selectors.timeframeSelectors[selectedTimeframePay] ??
                             "Period")),
             const SizedBox(height: 16.0),
-            Center(
-              child: Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      const Text("Order Status"),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      AsyncProviderComparer(
-                          provider: finstatusProvider,
-                          future: finstatusProvider.future,
-                          render: (r) => PieChartStats(pie: r.pie))
-                    ],
+            Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  color: Color(0xFF000000 | 0x22BB6F),
+                  child: Text(
+                    "CASH",
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: Theme.of(context).colorScheme.surface,
+                        fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(
-                    width: 10,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  color: Color(0xFF000000 | 0xD22371),
+                  child: Text(
+                    "CARD",
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: Theme.of(context).colorScheme.surface,
+                        fontWeight: FontWeight.bold),
                   ),
-                  Column(
-                    children: [
-                      const Text("Used Methods"),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      AsyncProviderComparer(
-                          provider: finmethodsProvider,
-                          future: finmethodsProvider.future,
-                          render: (r) => PieChartStats(pie: r.pie))
-                    ],
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  color: Color(0xFF000000 | 0x0D3575),
+                  child: Text(
+                    "PAYPAL",
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: Theme.of(context).colorScheme.surface,
+                        fontWeight: FontWeight.bold),
                   ),
-                ],
-              ),
+                )
+              ],
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      "Order Status",
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    AsyncProviderComparer(
+                        provider: finstatusProvider,
+                        future: finstatusProvider.future,
+                        render: (r) => PieChartStats(pie: r.pie))
+                  ],
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  children: [
+                    Text(
+                      "Used Methods",
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    AsyncProviderComparer(
+                        provider: finmethodsProvider,
+                        future: finmethodsProvider.future,
+                        render: (r) => PieChartStats(pie: r.pie))
+                  ],
+                ),
+              ],
             ),
             const Divider(),
             const SizedBox(height: 16.0),

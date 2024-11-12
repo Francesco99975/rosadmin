@@ -104,6 +104,38 @@ class _ClienteleStatsState extends ConsumerState<ClienteleStats> {
                     ],
                   ),
                   const SizedBox(height: 10.0),
+                  Wrap(
+                    alignment: WrapAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        color: Color(0xFF000000 | 0x1CE2D4),
+                        child: Text(
+                          "New Customers",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(
+                                  color: Theme.of(context).colorScheme.surface,
+                                  fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        color: Color(0xFF000000 | 0xCFE410),
+                        child: Text(
+                          "Recurring Customers",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(
+                                  color: Theme.of(context).colorScheme.surface,
+                                  fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10.0),
                   StatsChart(
                       stats: r.customersData,
                       title: "Clientele",

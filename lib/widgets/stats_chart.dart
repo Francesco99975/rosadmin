@@ -132,14 +132,13 @@ class StatsChart extends StatelessWidget {
                 axisNameWidget: Text(
                   title,
                   style: TextStyle(
-                    fontSize: calculateFontSize(screenWidth),
                     color: Theme.of(context).colorScheme.secondary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 sideTitles: SideTitles(
                   showTitles: true,
-                  reservedSize: 22,
+                  reservedSize: 32,
                   interval: 1,
                   getTitlesWidget: (value, meta) {
                     return _bottomTitleWidgets(value, meta, screenWidth);
