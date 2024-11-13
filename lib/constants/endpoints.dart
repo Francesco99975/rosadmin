@@ -7,6 +7,10 @@ class Endpoints {
 
   static const tokenCheck = "$adminBaseUrl/check";
 
+  static const settingEndpoint = "$adminBaseUrl/setting";
+
+  static const messageEndpoint = "$adminBaseUrl/message";
+
   static const visitsEndpoint = "$adminBaseUrl/visits";
 
   static const visitsStatsEndpoint = "$visitsEndpoint/stats";

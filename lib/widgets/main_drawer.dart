@@ -5,6 +5,7 @@ import 'package:rosadmin/screens/categories.dart';
 import 'package:rosadmin/screens/costumers/customers.dart';
 import 'package:rosadmin/screens/orders/orders.dart';
 import 'package:rosadmin/screens/products/products.dart';
+import 'package:rosadmin/screens/settings.dart';
 
 class MainDrawer extends StatelessWidget {
   final String active;
@@ -76,10 +77,14 @@ class MainDrawer extends StatelessWidget {
             onTap: () => context.go(CustomerScreen.routePath),
           ),
           ListTile(
+            leading: Icon(
+              Icons.settings,
+              color: active == SettingsScreen.routePath
+                  ? Theme.of(context).colorScheme.secondary
+                  : Colors.white,
+            ),
             title: const Text('Settings'),
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () => context.go(SettingsScreen.routePath),
           ),
         ],
       ),
