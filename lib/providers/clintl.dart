@@ -1,3 +1,4 @@
+import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:fpdart/fpdart.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:rosadmin/constants/endpoints.dart";
@@ -8,8 +9,7 @@ import "package:rosadmin/models/clientele.dart";
 part 'clintl.g.dart';
 
 @riverpod
-Future<Either<Failure, Clientele>> clintl(
-    ClintlRef ref, String timeframe) async {
+Future<Either<Failure, Clientele>> clintl(Ref ref, String timeframe) async {
   final network = ref.read(networkProvider);
 
   return network.match((l) => Left(Failure(message: l.message)),

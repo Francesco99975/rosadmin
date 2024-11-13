@@ -11,7 +11,7 @@ part 'fins.g.dart';
 
 @riverpod
 Future<Either<Failure, Finances>> fins(
-    FinsRef ref, String timeframe, String method, String status) async {
+    Ref ref, String timeframe, String method, String status) async {
   final network = ref.read(networkProvider);
 
   return network.match((l) => Left(Failure(message: l.message)),

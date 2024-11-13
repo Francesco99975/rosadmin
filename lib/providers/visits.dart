@@ -11,7 +11,7 @@ part 'visits.g.dart';
 
 @riverpod
 Future<Either<Failure, Visit>> visits(
-    VisitsRef ref, String quality, String timeframe) async {
+    Ref ref, String quality, String timeframe) async {
   final network = ref.read(networkProvider);
 
   return network.match((l) => Left(l), (network) async {

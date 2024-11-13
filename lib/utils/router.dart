@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rosadmin/main.dart';
 import 'package:rosadmin/models/customer.dart';
-import 'package:rosadmin/models/purchase.dart';
 import 'package:rosadmin/screens/categories.dart';
 import 'package:rosadmin/screens/costumers/costimer_detail.dart';
 import 'package:rosadmin/screens/costumers/customers.dart';
@@ -102,8 +99,11 @@ final GoRouter router = GoRouter(
         }),
     GoRoute(
         path: QRScannerScreen.routePath,
+        name: QRScannerScreen.routePath,
         builder: (BuildContext context, GoRouterState state) {
-          return const QRScannerScreen();
+          return QRScannerScreen(
+            currentOrderId: state.uri.queryParameters['orderId'] ?? "",
+          );
         }),
     GoRoute(
       path: OrderDetailsScreen.routePath,
@@ -111,20 +111,6 @@ final GoRouter router = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return OrderDetailsScreen(
           orderId: state.uri.queryParameters['orderId'] ?? "",
-          customer:
-              Customer.fromJson(state.uri.queryParameters['customer'] ?? ""),
-          pickuptime:
-              DateTime.parse(state.uri.queryParameters['pickuptime'] ?? ""),
-          created: DateTime.parse(state.uri.queryParameters['created'] ?? ""),
-          purchases:
-              ((jsonDecode(state.uri.queryParameters['purchases'] ?? "[]"))
-                      as List<dynamic>)
-                  .map((e) => Purchase.fromJson(e))
-                  .toList(),
-          fulfilled:
-              bool.parse(state.uri.queryParameters['fulfilled'] ?? "false"),
-          method: state.uri.queryParameters['method'] ?? "",
-          total: double.parse(state.uri.queryParameters['total'] ?? "0.0"),
         );
       },
     ),

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
@@ -23,11 +21,13 @@ class OrderItem extends StatelessWidget {
         NumberFormat.simpleCurrency(locale: 'en_CA', name: 'CAD');
 
     // Determine border color based on pickup date
-    Color borderColor = order.pickuptime.isBefore(currentDate)
-        ? Colors.red // Order is overdue
-        : order.pickuptime.eqvYearMonthDay(currentDate)
-            ? Colors.blue // Pickup date is today
-            : Colors.transparent; // Default color
+    Color borderColor = order.fulfilled
+        ? Colors.green
+        : order.pickuptime.isBefore(currentDate)
+            ? Colors.red // Order is overdue
+            : order.pickuptime.eqvYearMonthDay(currentDate)
+                ? Colors.cyan // Pickup date is today
+                : Colors.transparent; // Default color
 
     Color moneyColor = const Color.fromARGB(255, 169, 75, 185);
 
@@ -57,14 +57,6 @@ class OrderItem extends StatelessWidget {
         child: ListTile(
           onTap: () => context.pushNamed('order_detail', queryParameters: {
             "orderId": order.id,
-            "customer": order.customer.toJson(),
-            "purchases":
-                jsonEncode(order.purchases.map((e) => e.toJson()).toList()),
-            "total": (order.total / 100.0).toString(),
-            "pickuptime": order.pickuptime.toIso8601String(),
-            "created": order.created.toIso8601String(),
-            "method": order.method,
-            "fulfilled": order.fulfilled.toString(),
           }),
           title: Text.rich(TextSpan(
               text: "From",

@@ -6,7 +6,7 @@ part of 'fins.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$finsHash() => r'fc9938d10b508eaf44b32d86f342a316ef1ed3e9';
+String _$finsHash() => r'7e93882c2214ee66086bc8a94f829f3304d64776';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -7,9 +7,11 @@ import 'package:rosadmin/utils/snackbar_service.dart';
 import 'package:go_router/go_router.dart';
 
 class QRScannerScreen extends ConsumerStatefulWidget {
-  const QRScannerScreen({super.key});
-
   static const routePath = "/scanner";
+
+  final String currentOrderId;
+
+  const QRScannerScreen({super.key, required this.currentOrderId});
 
   @override
   ConsumerState<QRScannerScreen> createState() => _QRScannerScreenState();
@@ -65,13 +67,15 @@ class _QRScannerScreenState extends ConsumerState<QRScannerScreen> {
                   context: context, message: "No Valid Value in QR Code");
             }
 
-            final res =
-                await ref.read(ordersProvider.notifier).fulfillOrder(value);
+            final res = await ref
+                .read(singleOrderProvider(widget.currentOrderId).notifier)
+                .fulfillOrder(value);
 
             res.match(
                 (l) => SnackBarService.showNegativeSnackBar(
                     context: context, message: l.message), (_) {
               if (context.mounted) {
+                final _ = ref.refresh(ordersProvider.future);
                 context.pop();
               }
             });

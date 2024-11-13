@@ -6,7 +6,7 @@ part of 'clintl.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$clintlHash() => r'c16792dd724e14f2f30f1f644d03a0ff12b7fbbd';
+String _$clintlHash() => r'f79d3f8b4fc3be3f8792c57ec16c412261aa2255';
 
 /// Copied from Dart SDK
 class _SystemHash {
