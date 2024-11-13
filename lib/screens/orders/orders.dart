@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rosadmin/providers/orders.dart';
 import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 import 'package:rosadmin/widgets/empty.dart';
+import 'package:rosadmin/widgets/main_appbar.dart';
 import 'package:rosadmin/widgets/main_drawer.dart';
 import 'package:rosadmin/widgets/order_item.dart';
 
@@ -16,9 +17,7 @@ class OrderScreen extends StatelessWidget {
         future: ordersProvider.future,
         render: (orders) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('Orders'),
-            ),
+            appBar: MainAppBar(title: "Orders"),
             drawer: const MainDrawer(
               active: OrderScreen.routePath,
             ),

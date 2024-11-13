@@ -3,6 +3,7 @@ import 'package:rosadmin/providers/customers.dart';
 import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 import 'package:rosadmin/widgets/customer_item.dart';
 import 'package:rosadmin/widgets/empty.dart';
+import 'package:rosadmin/widgets/main_appbar.dart';
 import 'package:rosadmin/widgets/main_drawer.dart';
 
 class CustomerScreen extends StatelessWidget {
@@ -16,9 +17,7 @@ class CustomerScreen extends StatelessWidget {
         future: customersProvider.future,
         render: (customers) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('Customers'),
-            ),
+            appBar: MainAppBar(title: "Customers"),
             drawer: const MainDrawer(
               active: CustomerScreen.routePath,
             ),

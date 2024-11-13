@@ -9,6 +9,7 @@ import 'package:rosadmin/widgets/async_provider_overwriter.dart';
 import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 import 'package:rosadmin/widgets/empty.dart';
 import 'package:rosadmin/widgets/fab.dart';
+import 'package:rosadmin/widgets/main_appbar.dart';
 import 'package:rosadmin/widgets/main_drawer.dart';
 import 'package:rosadmin/widgets/product_item.dart';
 
@@ -24,9 +25,7 @@ class ProductScreen extends ConsumerWidget {
         future: productsProvider.future,
         render: (products) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('Products'),
-            ),
+            appBar: MainAppBar(title: "Products"),
             drawer: const MainDrawer(
               active: ProductScreen.routePath,
             ),

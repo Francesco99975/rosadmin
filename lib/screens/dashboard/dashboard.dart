@@ -1,41 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:rosadmin/main.dart';
 
-import 'package:rosadmin/providers/user.dart';
-
-import 'package:rosadmin/screens/auth.dart';
 import 'package:rosadmin/screens/dashboard/clientele_stats.dart';
 import 'package:rosadmin/screens/dashboard/finances_stats.dart';
 import 'package:rosadmin/screens/dashboard/traffic_stats.dart';
+import 'package:rosadmin/widgets/main_appbar.dart';
 
 import 'package:rosadmin/widgets/main_drawer.dart';
 
-class DashboardScreen extends ConsumerWidget {
+class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   static const routePath = "/dashboard";
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final userx = ref.read(userxProvider.notifier);
-
+  Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Admin Dashboard'),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.exit_to_app),
-              onPressed: () {
-                userx.logout().then((value) =>
-                    {if (context.mounted) context.go(AuthScreen.routePath)});
-              },
-            ),
-          ],
+        appBar: MainAppBar(
+          title: "Dashboard",
         ),
         drawer: const MainDrawer(
           active: SplashView.routePath,

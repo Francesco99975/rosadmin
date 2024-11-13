@@ -6,6 +6,7 @@ import 'package:rosadmin/utils/snackbar_service.dart';
 import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 import 'package:rosadmin/widgets/category_item.dart';
 import 'package:rosadmin/widgets/empty.dart';
+import 'package:rosadmin/widgets/main_appbar.dart';
 import 'package:rosadmin/widgets/main_drawer.dart';
 
 class CategoryScreen extends ConsumerStatefulWidget {
@@ -109,9 +110,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
         future: categoriesProvider.future,
         render: (categoryList) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('Categories'),
-            ),
+            appBar: MainAppBar(title: "Categories"),
             drawer: const MainDrawer(
               active: CategoryScreen.routePath,
             ),

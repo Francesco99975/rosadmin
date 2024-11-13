@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:rosadmin/models/standing.dart';
+import 'package:rosadmin/widgets/standings_item.dart';
 
 class CardList extends StatelessWidget {
   final String title;
-  final List<String> items;
+  final List<Standing> items;
+  final bool ordered;
 
-  const CardList({super.key, required this.title, required this.items});
+  const CardList(
+      {super.key,
+      required this.title,
+      required this.items,
+      this.ordered = false});
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +55,13 @@ class CardList extends StatelessWidget {
                   shrinkWrap: true,
                   itemCount: items.length,
                   itemBuilder: (context, index) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: Text(
-                          items[index],
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                      ),
-                    );
+                    return ordered
+                        ? OrderedStandingItem(
+                            index: index,
+                            name: items[index].name,
+                            value: items[index].value)
+                        : UnorderedStandingItem(
+                            name: items[index].name, value: items[index].value);
                   },
                 ),
         ],

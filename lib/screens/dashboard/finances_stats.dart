@@ -6,8 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intl/intl.dart';
 import 'package:rosadmin/constants/selectors.dart';
+import 'package:rosadmin/models/standing.dart';
 import 'package:rosadmin/providers/fins.dart';
 import 'package:rosadmin/providers/socket.dart';
+import 'package:rosadmin/utils/formatters.dart';
 import 'package:rosadmin/widgets/async_provider_comparer.dart';
 import 'package:rosadmin/widgets/card_list.dart';
 import 'package:rosadmin/widgets/pie_chart_stats.dart';
@@ -62,8 +64,6 @@ class _FinancesStatsState extends ConsumerState<FinancesStats> {
 
   @override
   Widget build(BuildContext context) {
-    final moneyFormatter =
-        NumberFormat.simpleCurrency(locale: 'en_CA', name: 'CAD');
     final dateFormatter = DateFormat.yMMMd();
 
     return SingleChildScrollView(
@@ -403,59 +403,84 @@ class _FinancesStatsState extends ConsumerState<FinancesStats> {
                       children: [
                         CardList(
                           title: 'Top Orders',
+                          ordered: true,
                           items: r.rankedOrders
-                              .map((e) =>
-                                  '${e.customer} - ${moneyFormatter.format(e.cost / 100)} - ${dateFormatter.format(e.created)}')
+                              .map((e) => Standing(
+                                  name:
+                                      "${e.customer}(${dateFormatter.format(e.created)})",
+                                  value: moneyFormatter.format(e.cost)))
                               .toList(),
                         ),
                         const SizedBox(height: 16.0),
                         const Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Wrap(
+                          alignment: WrapAlignment.spaceEvenly,
+                          spacing: 16.0, // Horizontal space between items
+                          runSpacing:
+                              16.0, // Vertical space between items when wrapping
                           children: [
-                            Expanded(
+                            Container(
+                              constraints: BoxConstraints(maxWidth: 400),
                               child: CardList(
                                 title: 'Top Sellers',
+                                ordered: true,
                                 items: r.toppedSellers
-                                    .map((e) =>
-                                        '${e.name} - ${e.category} - ${e.sold}')
+                                    .map((e) => Standing(
+                                        name: "${e.name}(${e.category})",
+                                        value: e.sold.toString()))
                                     .toList(),
                               ),
                             ),
                             const SizedBox(width: 16.0),
-                            Expanded(
+                            Container(
+                              constraints: BoxConstraints(maxWidth: 400),
                               child: CardList(
                                 title: 'Top Gainers',
+                                ordered: true,
                                 items: r.toppedGainers
-                                    .map((e) =>
-                                        '${e.name} - ${e.category} - ${moneyFormatter.format(e.gained / 100)}')
+                                    .map((e) => Standing(
+                                        name: "${e.name}(${e.category})",
+                                        value: moneyFormatter
+                                            .format(e.gained / 100)))
                                     .toList(),
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 16.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Wrap(
+                          alignment: WrapAlignment.spaceEvenly,
+                          spacing: 16.0, // Horizontal space between items
+                          runSpacing:
+                              16.0, // Vertical space between items when wrapping
                           children: [
-                            Expanded(
+                            Container(
+                              constraints: const BoxConstraints(
+                                maxWidth: 400,
+                              ),
                               child: CardList(
                                 title: 'Flop Sellers',
+                                ordered: true,
                                 items: r.floppedSellers
-                                    .map((e) =>
-                                        '${e.name} - ${e.category} - ${e.sold}')
+                                    .map((e) => Standing(
+                                        name: "${e.name}(${e.category})",
+                                        value: e.sold.toString()))
                                     .toList(),
                               ),
                             ),
                             const SizedBox(width: 16.0),
-                            Expanded(
+                            Container(
+                              constraints: const BoxConstraints(
+                                maxWidth: 400,
+                              ),
                               child: CardList(
                                 title: 'Flop Gainers',
+                                ordered: true,
                                 items: r.floppedGainers
-                                    .map((e) =>
-                                        '${e.name} - ${e.category} - ${moneyFormatter.format(e.gained / 100)}')
+                                    .map((e) => Standing(
+                                        name: "${e.name}(${e.category})",
+                                        value: moneyFormatter
+                                            .format(e.gained / 100)))
                                     .toList(),
                               ),
                             ),

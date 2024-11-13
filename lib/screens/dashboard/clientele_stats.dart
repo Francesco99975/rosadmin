@@ -7,6 +7,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:intl/intl.dart';
 import 'package:rosadmin/constants/selectors.dart';
 import 'package:rosadmin/models/clientele.dart';
+import 'package:rosadmin/models/standing.dart';
 import 'package:rosadmin/providers/clintl.dart';
 import 'package:rosadmin/providers/socket.dart';
 import 'package:rosadmin/widgets/async_provider_wrapper.dart';
@@ -145,9 +146,11 @@ class _ClienteleStatsState extends ConsumerState<ClienteleStats> {
                   const SizedBox(height: 16.0),
                   CardList(
                     title: 'Top Spenders',
+                    ordered: true,
                     items: r.topSpenders
-                        .map((e) =>
-                            '${e.fullname} - ${moneyFormatter.format(e.spent / 100)}')
+                        .map((e) => Standing(
+                            name: e.fullname,
+                            value: moneyFormatter.format(e.spent / 100)))
                         .toList(),
                   )
                 ],
