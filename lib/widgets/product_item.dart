@@ -139,6 +139,9 @@ class ProductItem extends StatelessWidget {
               "imageUrl": product.image,
               "category": product.category.id,
               "weighed": product.weighed.toString(),
+              "published": product.published.toString(),
+              "featured": product.featured.toString(),
+              "lv": product.lv.toString(),
             }),
             child: isWideScreen
                 ? Text('EDIT',
@@ -178,8 +181,9 @@ class ProductItem extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () async {
                           final response = await onDelete();
-                          if (context.mounted)
+                          if (context.mounted) {
                             Navigator.of(context).pop(); // Close dialog
+                          }
                           response.match(
                             (l) => SnackBarService.showNegativeSnackBar(
                               context: context,

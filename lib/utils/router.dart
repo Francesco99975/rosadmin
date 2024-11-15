@@ -60,6 +60,7 @@ final GoRouter router = GoRouter(
           featured:
               bool.parse(state.uri.queryParameters['featured'] ?? "false"),
           weighed: bool.parse(state.uri.queryParameters['weighed'] ?? "false"),
+          lv: int.parse(state.uri.queryParameters['lv'] ?? "1"),
         );
       },
     ),
