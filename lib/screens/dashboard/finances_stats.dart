@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intl/intl.dart';
+import 'package:rosadmin/constants/events.dart';
 import 'package:rosadmin/constants/selectors.dart';
 import 'package:rosadmin/models/standing.dart';
 import 'package:rosadmin/providers/fins.dart';
@@ -52,7 +53,9 @@ class _FinancesStatsState extends ConsumerState<FinancesStats> {
     selectedStatusPay = Selectors.statusSelectors.keys.toList()[0];
 
     sub = ref.read(socketProvider).subscribe((event) {
-      if (jsonDecode(event)['type'] == "ufadmin") {}
+      if (jsonDecode(event)['type'] == SocketEvents.orders) {
+        ref.invalidate(finstsProvider);
+      }
     });
   }
 

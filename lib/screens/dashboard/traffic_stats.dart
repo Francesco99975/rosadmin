@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:rosadmin/constants/events.dart';
 import 'package:rosadmin/constants/selectors.dart';
 import 'package:rosadmin/providers/socket.dart';
 import 'package:rosadmin/providers/visits.dart';
@@ -30,7 +31,9 @@ class _TrafficStatsState extends ConsumerState<TrafficStats> {
     selectedQuality = Selectors.qualitySelectors.keys.toList()[0];
     selectedTimeframe = Selectors.timeframeSelectors.keys.toList()[0];
     sub = ref.read(socketProvider).subscribe((event) {
-      if (jsonDecode(event)['type'] == "uvadmin") {}
+      if (jsonDecode(event)['type'] == SocketEvents.uvadmin) {
+        ref.invalidate(vistatProvider);
+      }
     });
   }
 

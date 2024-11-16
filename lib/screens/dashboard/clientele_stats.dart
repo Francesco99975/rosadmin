@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:intl/intl.dart';
+import 'package:rosadmin/constants/events.dart';
 import 'package:rosadmin/constants/selectors.dart';
 import 'package:rosadmin/models/clientele.dart';
 import 'package:rosadmin/models/standing.dart';
@@ -32,8 +33,8 @@ class _ClienteleStatsState extends ConsumerState<ClienteleStats> {
     super.initState();
     selectedTimeframe = Selectors.timeframeSelectors.keys.toList()[0];
     sub = ref.read(socketProvider).subscribe((event) {
-      if (jsonDecode(event)['type'] == "ucadmin") {
-        final _ = ref.refresh(clintlProvider(selectedTimeframe).future);
+      if (jsonDecode(event)['type'] == SocketEvents.customers) {
+        ref.invalidate(clintlProvider(selectedTimeframe));
       }
     });
   }

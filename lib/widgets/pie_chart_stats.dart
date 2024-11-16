@@ -116,6 +116,10 @@ IconData _getIconDynamically(String text) {
       return Icons.credit_card;
     case 'paypal':
       return Icons.paypal;
+    case 'Fulfilled':
+      return Icons.check_circle;
+    case 'Unfulfilled':
+      return Icons.cancel;
     default:
       return Icons.no_accounts;
   }
