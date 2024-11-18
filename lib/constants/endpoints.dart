@@ -11,6 +11,8 @@ class Endpoints {
 
   static const messageEndpoint = "$adminBaseUrl/message";
 
+  static const notifEndnpoint = "$adminBaseUrl/notif";
+
   static const visitsEndpoint = "$adminBaseUrl/visits";
 
   static const visitsStatsEndpoint = "$visitsEndpoint/stats";
