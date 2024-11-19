@@ -1,5 +1,5 @@
 class Endpoints {
-  static const baseUrl = "http://127.0.0.1:8078";
+  static const baseUrl = String.fromEnvironment("BASE_URL");
 
   static const adminBaseUrl = "$baseUrl/admin";
 
