@@ -17,13 +17,35 @@ class MainDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          const DrawerHeader(
+          DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Theme.of(context).colorScheme.surface,
             ),
-            child: Text(
-              'Dashboard Menu',
-              style: TextStyle(color: Colors.white, fontSize: 20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Logo
+                Expanded(
+                  flex: 2,
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                // Spacer
+                SizedBox(height: 10),
+                // App Name
+                Text(
+                  'Rosadmin', // Replace with your app's name
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           ),
           ListTile(
