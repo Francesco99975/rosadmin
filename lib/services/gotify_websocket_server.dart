@@ -83,12 +83,13 @@ class GotifyWebSocketService extends TaskHandler {
   }
 
   void connect() {
-    _channel =
-        WebSocketChannel.connect(Uri.parse('$gotifyUrl?token=$appToken'));
+    _channel = WebSocketChannel.connect(
+        Uri.parse('$gotifyUrl/stream?token=$appToken'));
 
     _channel.stream.listen(
       (message) {
         final decodedMessage = jsonDecode(message);
+        debugPrint("Received message: $decodedMessage");
         NotificationService.showNotification(
           id: decodedMessage['id'],
           title: decodedMessage['title'],

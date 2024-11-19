@@ -43,7 +43,7 @@
 
          <!-- Warning: Do not change service name. -->
         <service
-            android:name="com.example.rosadmin.service.ForegroundService"
+            android:name="ink.urx.rosadmin.service.ForegroundService"
             android:foregroundServiceType="dataSync|remoteMessaging"
             android:exported="false" />
     </application>

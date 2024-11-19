@@ -65,7 +65,9 @@ class _SplashViewState extends ConsumerState<SplashView> {
       render: (user) {
         final network = ref.read(networkProvider);
         network.match((_) {}, (network) {
-          startCallback(network);
+          startCallback(network).then((result) => result.match(
+              (l) => debugPrint(l.message),
+              (_) => debugPrint("Foreground Service started")));
         });
         return const DashboardScreen();
       },
