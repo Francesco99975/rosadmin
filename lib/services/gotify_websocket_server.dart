@@ -66,8 +66,8 @@ class GotifyWebSocketService extends TaskHandler {
     final config = await _fetchConfigFromServer(network);
     return config.match(
       (l) => Left(l),
-      (config) => Right(
-          GotifyWebSocketService._internal(config['url']!, config['token']!)),
+      (config) => Right(GotifyWebSocketService._internal(
+          config['server']!, config['token']!)),
     );
   }
 
@@ -77,8 +77,13 @@ class GotifyWebSocketService extends TaskHandler {
         url: Endpoints.notifEndnpoint, requireAuth: true);
 
     return response.match((l) => Left(l), (response) {
-      final data = jsonDecode(response.body) as Map<String, String>;
-      return Right(data);
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      final Map<String, String> stringData = data.map((key, value) => MapEntry(
+            key,
+            value.toString(),
+          ));
+      return Right(stringData);
     });
   }
 

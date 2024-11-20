@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rosadmin/constants/endpoints.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 part 'socket.g.dart';
@@ -23,8 +24,8 @@ class SocketChannel {
 
   void init() {
     if (_channel.isNone()) {
-      _channel = Option.of(
-          WebSocketChannel.connect(Uri.parse("ws://localhost:8078/ws")));
+      String uri = Endpoints.baseUrl.replaceFirst("http", "ws");
+      _channel = Option.of(WebSocketChannel.connect(Uri.parse("$uri/ws")));
     }
 
     _channel.match(() => null, (channel) {

@@ -87,24 +87,27 @@ class OrderDetailsScreen extends ConsumerWidget {
                         flex: 3,
                         child: ElevatedButton(
                           onPressed: () =>
-                              context.go(QRScannerScreen.routePath),
+                              context.push(QRScannerScreen.routePath),
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                Theme.of(context).colorScheme.primary,
+                                Theme.of(context).colorScheme.primaryFixedDim,
                             padding: const EdgeInsets.symmetric(vertical: 16.0),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          child: const Column(
+                          child: Column(
                             children: [
-                              Icon(Icons.qr_code, size: 40),
+                              Icon(Icons.qr_code,
+                                  size: 40,
+                                  color: Theme.of(context).colorScheme.surface),
                               SizedBox(height: 8),
                               Text(
                                 "Scan to Fulfill",
                                 style: TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.surface,
                                 ),
                               ),
                             ],
