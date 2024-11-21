@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rosadmin/constants/events.dart';
 import 'package:rosadmin/providers/orders.dart';
 import 'package:rosadmin/providers/socket.dart';
+import 'package:rosadmin/services/notification_service.dart';
+// import 'package:rosadmin/services/notification_service.dart';
 import 'package:rosadmin/widgets/async_provider_wrapper.dart';
 import 'package:rosadmin/widgets/empty.dart';
 import 'package:rosadmin/widgets/main_appbar.dart';
@@ -30,6 +32,8 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
     sub = ref.read(socketProvider).subscribe((event) {
       if (jsonDecode(event)['type'] == SocketEvents.orders) {
         ref.invalidate(ordersProvider);
+        NotificationService.showNotification(
+            id: 1, title: "New Orders", body: "A new order arrived");
       }
     });
   }

@@ -28,6 +28,7 @@ class _TrafficStatsState extends ConsumerState<TrafficStats> {
   @override
   void initState() {
     super.initState();
+
     selectedQuality = Selectors.qualitySelectors.keys.toList()[0];
     selectedTimeframe = Selectors.timeframeSelectors.keys.toList()[0];
     sub = ref.read(socketProvider).subscribe((event) {

@@ -26,6 +26,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   FutureEither<void> _login() async {
     loading = true;
 
+    debugPrint("Logging in...");
+
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
 
