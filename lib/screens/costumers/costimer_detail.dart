@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:rosadmin/models/customer.dart';
+import 'package:rosadmin/utils/formatters.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomerDetailsScreen extends StatelessWidget {
@@ -15,8 +17,6 @@ class CustomerDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final moneyFormatter =
-        NumberFormat.simpleCurrency(locale: 'en_CA', name: 'CAD');
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -24,7 +24,7 @@ class CustomerDetailsScreen extends StatelessWidget {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.of(context).pop();
+                context.pop();
               },
             ),
             title: const Text('Customer Details'),
