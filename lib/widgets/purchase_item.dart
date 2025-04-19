@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:rosadmin/utils/capitalizer.dart';
 
 class PurchaseItem extends StatelessWidget {
+  final bool weighed;
   final int quantity;
   final String productName;
   final String category;
@@ -10,6 +11,7 @@ class PurchaseItem extends StatelessWidget {
 
   const PurchaseItem({
     super.key,
+    required this.weighed,
     required this.quantity,
     required this.productName,
     required this.category,
@@ -24,7 +26,7 @@ class PurchaseItem extends StatelessWidget {
       leading: CircleAvatar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: Text(
-          quantity.toString(),
+          weighed ? "${quantity.toDouble() / 10}lb" : quantity.toString(),
           style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimary,
             fontWeight: FontWeight.bold,

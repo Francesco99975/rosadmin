@@ -9,7 +9,9 @@ class Purchase {
   final DateTime created;
   final DateTime updated;
 
-  int get cost => product.price * quantity;
+  int get cost => product.weighed
+      ? (product.price * quantity ~/ 10)
+      : product.price * quantity;
 
   Purchase({
     required this.id,

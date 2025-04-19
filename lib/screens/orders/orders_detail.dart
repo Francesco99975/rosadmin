@@ -187,6 +187,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     final purchase = order.purchases[index];
                     return PurchaseItem(
+                      weighed: purchase.product.weighed,
                       quantity: purchase.quantity,
                       productName: purchase.product.name,
                       category: purchase.product.category.name,
